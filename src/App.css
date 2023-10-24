@@ -1,0 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.home-icon:hover{
+    cursor: pointer;
+    z-index: 2;
+    color: #fff;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.trello-main-logo{
+    font-family: 'Poppins', sans-serif;
+}
