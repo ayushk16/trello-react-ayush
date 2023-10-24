@@ -1,10 +1,10 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import axios from 'axios';
 
 import { Box, Stack, TextField, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Paper from '@mui/material/Paper';
+
 import { styled } from '@mui/material/styles';
 import usePostBoard from '../../Hooks/PostBoard';
 
@@ -16,37 +16,27 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const AddElement = ({ setBoards }) => {
+const AddList = ({ setBoard, boardId }) => {
   const [listValue, setListValue] = React.useState('');
-  const PostBoard = usePostBoard();
-
   const addValue = () => {
     const lastUrl = `key=537b641d27415d26a221d4f9cd736b2e&token=ATTA2aded428541342740a1e740389d73a90e8b6b943e5c1cbdf04788548355d5801612FEE20`;
 
     if (listValue) {
       axios({
         method: 'POST',
-        url: `https://api.trello.com/1/boards/`,
-        params: {
-          name: listValue,
-          key: '537b641d27415d26a221d4f9cd736b2e',
-          token:
-            'ATTA2aded428541342740a1e740389d73a90e8b6b943e5c1cbdf04788548355d5801612FEE20',
-        },
+        url: `https://api.trello.com/1/lists?name=${listValue}&idBoard=${boardId}&${lastUrl}`,
       })
         .then((res) => {
-          console.log('from add board', res.data);
-          setBoards((prev) => [...prev, res.data]);
+          console.log('from add list', res.data);
+          setBoard((prev) => [...prev, res.data]);
         })
         .catch((err) => {
           console.log(err);
         });
     }
 
-    // listValue ? PostBoard(listValue, setBoards) : null;
     setListValue('');
   };
-
   return (
     <>
       <Box
@@ -86,4 +76,4 @@ const AddElement = ({ setBoards }) => {
   );
 };
 
-export default AddElement;
+export default AddList;

@@ -80,11 +80,10 @@ const BoardTile = ({ id }) => {
             sx={{
               width: 'auto',
               height: 300,
-              // backgroundImage:
-              //   boardTile.prefs.backgroundImageScaled !== undefined
-              //     ? `url(${boardTile.prefs.backgroundImageScaled[0].url})`
-              //     : `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`,
-              // backgroundImage: `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`,
+              // backgroundImage: boardTile.prefs.backgroundImage
+              //   ? `url(${boardTile.prefs.backgroundImage})`
+              //   : `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`,
+              // // backgroundImage: `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`,
               // backgroundColor: boardTile.prefs.backgroundColor
               //   ? boardTile.prefs.backgroundColor
               //   : 'primary.dark',
