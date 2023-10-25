@@ -88,6 +88,7 @@ const ListCards = ({ listId, setBoards }) => {
             cardId={modalCardId}
             handleClose={handleClose}
             handleOpen={handleOpen}
+            setCards={setCards}
           />
         </Modal>
       </>
