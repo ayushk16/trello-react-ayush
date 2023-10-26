@@ -17,7 +17,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const BoardTile = ({ id }) => {
   const { boardTile, loading, error } = useGetBoardTile(id);
-  console.log('from boardTile', boardTile);
+  //console.log('from boardTile', boardTile);
   const navigate = useNavigate();
   if (loading) {
     return (

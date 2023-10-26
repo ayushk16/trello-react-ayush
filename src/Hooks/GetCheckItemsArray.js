@@ -17,10 +17,10 @@ const useGetCheckItemsArray = (checkListId) => {
             }
         }).then(res => {
             setCheckItemsArray(res.data);
-            console.log('from checkItemArray', res.data)
+            //console.log('from checkItemArray', res.data)
             setLoading(false);
         }).catch(err => {
-            console.log(err);
+            //console.log(err);
             setLoading(false);
             setError(err);
         })

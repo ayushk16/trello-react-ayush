@@ -13,6 +13,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
+  //console.log(deleteFunctionParams);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -25,13 +26,19 @@ const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
 
   return (
     <>
-      <Button variant="contained" color="error" onClick={handleClickOpen}>
+      <Button
+        sx={{ justifySelf: 'flex-end', height: 'fit-content' }}
+        variant="contained"
+        size="small"
+        color="error"
+        onClick={handleClickOpen}
+      >
         <DeleteIcon style={{ alignSelf: 'flex-end', fontSize: '1.5rem' }} />
         <Typography
           variant="body2"
           marginLeft={1}
           onClick={() => {
-            console.log('delete Element');
+            //console.log('delete Element');
           }}
         >
           DELETE
@@ -53,7 +60,7 @@ const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
         <DialogActions>
           <Button
             onClick={() => {
-              console.log('cancel');
+              //console.log('cancel');
               handleClose();
             }}
           >
@@ -61,7 +68,7 @@ const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
           </Button>
           <Button
             onClick={() => {
-              console.log('delete initiated');
+              //console.log('delete initiated');
               deleteFunction(deleteFunctionParams);
               handleClose();
             }}

@@ -24,7 +24,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const BoardsContainer = () => {
   const { boards, setBoards, loading, error } = useGetHome();
-  // console.log('from boardsContainer', boards);
+  // //console.log('from boardsContainer', boards);
 
   if (loading) {
     return (

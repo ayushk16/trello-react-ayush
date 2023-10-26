@@ -17,14 +17,14 @@ const useGetBoardTile = (boardId) => {
                 token: import.meta.env.VITE_TOKEN
             }
         })
-            // .then(res => console.log(res.data))
+            // .then(res => //console.log(res.data))
             .then((res) => {
 
                 setBoardTile(res.data);
                 setLoading(false);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
                 setLoading(false);
                 setError(err);
             })

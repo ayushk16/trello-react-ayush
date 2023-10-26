@@ -39,12 +39,12 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
         },
       })
         .then((res) => {
-          console.log('from add checkitem', res.data);
+          // //console.log('from add checkitem', res.data);
           setCardCheckLists((prev) => [...prev, res.data]);
           handleClose();
         })
         .catch((err) => {
-          console.log(err);
+          // //console.log(err);
         });
     }
 
@@ -59,7 +59,7 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
           variant="body2"
           marginLeft={1}
           onClick={() => {
-            console.log('checklist add');
+            // //console.log('checklist add');
           }}
         >
           CHECKLIST
@@ -85,7 +85,7 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
         <DialogActions>
           <Button
             onClick={() => {
-              console.log('cancel');
+              // //console.log('cancel');
               handleClose();
             }}
           >
@@ -93,7 +93,7 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
           </Button>
           <Button
             onClick={() => {
-              console.log('cancel');
+              // //console.log('cancel');
               addValue();
             }}
           >

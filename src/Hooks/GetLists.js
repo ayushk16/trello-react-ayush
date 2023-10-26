@@ -18,11 +18,11 @@ const useGetList = (boardId) => {
         })
             .then((res) => {
                 setBoard(res.data);
-                console.log(res.data);
+                //console.log(res.data);
                 setLoading(false);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
                 setLoading(false);
                 setError(err);
             })

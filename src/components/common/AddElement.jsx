@@ -35,11 +35,11 @@ const AddElement = ({ setBoards }) => {
         },
       })
         .then((res) => {
-          console.log('from add board', res.data);
+          //console.log('from add board', res.data);
           setBoards((prev) => [...prev, res.data]);
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
     }
 

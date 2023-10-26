@@ -97,7 +97,7 @@ const ListCards = ({ listId, setBoards }) => {
 };
 
 const deleteCard = (cardId) => {
-  console.log(cardId);
+  // //console.log(cardId);
 };
 
 export default ListCards;

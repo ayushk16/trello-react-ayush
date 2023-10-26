@@ -17,10 +17,10 @@ const useGetChecklist = (checklistId) => {
             }
         }).then(res => {
             setCheckListData(res.data);
-            console.log('from api', res.data)
+            //console.log('from api', res.data)
             setLoading(false);
         }).catch(err => {
-            console.log(err);
+            //console.log(err);
             setLoading(false);
             setError(err);
         })

@@ -31,14 +31,14 @@ const AddElement = ({ checkListId, setCheckListData }) => {
         },
       })
         .then((res) => {
-          console.log('from add checkitem', res.data);
+          //console.log('from add checkitem', res.data);
           setCheckListData((prev) => ({
             ...prev,
             checkItems: [...prev.checkItems, res.data],
           }));
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
     }
 

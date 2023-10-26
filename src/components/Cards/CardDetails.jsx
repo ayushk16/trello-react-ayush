@@ -152,7 +152,7 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
                 variant="contained"
                 color="error"
                 onClick={() => {
-                  console.log('delete');
+                  //console.log('delete');
                   deleteCard(cardId, setCards);
                   handleClose();
                 }}

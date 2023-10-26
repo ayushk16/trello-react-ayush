@@ -13,6 +13,7 @@ import DeleteItem from '../common/DeleteItem';
 import deleteCheckItem from '../../Functions/deleteCheckItem';
 
 const CheckItem = ({
+  setTotalNumberOfItems,
   setNumberOfCheckedItems,
   cardId,
   setCheckItemsArray,
@@ -27,7 +28,7 @@ const CheckItem = ({
 
   useEffect(() => {
     setCheckedStatus(checkItemData.state == 'complete');
-    console.log(checkItemData.name, checkItemData.state);
+    //console.log(checkItemData.name, checkItemData.state);
   }, [checkItemData]);
 
   useEffect(() => {
@@ -39,6 +40,16 @@ const CheckItem = ({
         key: import.meta.env.VITE_API_KEY,
         token: import.meta.env.VITE_TOKEN,
       },
+    }).then((res) => {
+      console.log(res.data);
+      setCheckItemsArray((prev) => {
+        return prev.map((item) => {
+          if (item.id == checkItemId) {
+            return res.data;
+          }
+          return item;
+        });
+      });
     });
   }, [checkedStatus]);
 
@@ -49,14 +60,14 @@ const CheckItem = ({
       setNumberOfCheckedItems((prev) => prev + 1);
     }
   };
-  // console.log('from chekitem', checkItemData.name, checkItemData.state);
+  // //console.log('from chekitem', checkItemData.name, checkItemData.state);
 
   return (
     <FormControlLabel
       control={
         <Checkbox
           onChange={(e) => {
-            console.log(e.target.checked);
+            //console.log(e.target.checked);
             setCheckedStatus(e.target.checked);
             handleCheck();
           }}
@@ -80,17 +91,18 @@ const CheckItem = ({
           >
             {checkItemData.name}
           </Typography>
-          <Button color="error" onClick={() => {}}>
-            <DeleteItem
-              deleteFunction={deleteCheckItem}
-              deleteFunctionParams={{
-                checkItemId,
-                checkListId,
-                setCheckItemsArray,
-              }}
-              itemName={checkItemData.name}
-            />
-          </Button>
+          {/* <Button color="error" onClick={() => {}}> */}
+          <DeleteItem
+            deleteFunction={deleteCheckItem}
+            deleteFunctionParams={{
+              setTotalNumberOfItems,
+              checkItemId,
+              checkListId,
+              setCheckItemsArray,
+            }}
+            itemName={checkItemData.name}
+          />
+          {/* </Button> */}
         </div>
       }
     />

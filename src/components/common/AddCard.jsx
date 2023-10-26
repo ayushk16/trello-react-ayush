@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const AddCard = ({ listId, setCards }) => {
   const [listValue, setListValue] = React.useState('');
   const addValue = () => {
-    console.log(listValue, listId);
+    //console.log(listValue, listId);
     if (listValue) {
       axios({
         method: 'POST',
@@ -32,11 +32,11 @@ const AddCard = ({ listId, setCards }) => {
         },
       })
         .then((res) => {
-          console.log('from add card', res.data);
+          //console.log('from add card', res.data);
           setCards((prev) => [...prev, res.data]);
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
     }
     setListValue('');

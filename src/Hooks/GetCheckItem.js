@@ -17,10 +17,10 @@ const useGetCheckItem = (checkListId, checkItemId) => {
             }
         }).then(res => {
             setCheckItemData(res.data);
-            console.log('from api', res.data)
+            //console.log('from api', res.data)
             setLoading(false);
         }).catch(err => {
-            console.log(err);
+            //console.log(err);
             setLoading(false);
             setError(err);
         })

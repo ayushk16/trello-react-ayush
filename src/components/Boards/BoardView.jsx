@@ -13,7 +13,7 @@ import AddList from '../common/AddList';
 import useGetList from '../../Hooks/GetLists';
 const BoardView = ({ id }) => {
   const { board, setBoard, loading, error } = useGetList(id);
-  // console.log('from boards view', board);
+  // //console.log('from boards view', board);
 
   if (loading) {
     return (

@@ -18,6 +18,7 @@ import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress';
 
+import DeleteItem from '../common/DeleteItem';
 import deleteCheckList from '../../Functions/deleteCheckList';
 
 import { styled } from '@mui/material/styles';
@@ -38,26 +39,32 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 const CheckList = ({ checklistId, setCardCheckLists }) => {
   const { checkListData, setCheckListData, loading, error } =
     useGetChecklist(checklistId);
-  console.log('from cheklsit', checkListData);
+  //console.log('from cheklsit', checkListData);
   const { checkItemsArray, setCheckItemsArray } =
     useGetCheckItemsArray(checklistId);
-  console.log('checkithm', checkItemsArray);
+  //console.log('checkithm', checkItemsArray);
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(checkListData.name);
 
   const [numberOfCheckedItems, setNumberOfCheckedItems] = useState(0);
+  const [totalNumberOfItems, setTotalNumberOfItems] = useState(0);
 
   useEffect(() => {
+    console.log('checkItemsArray', checkItemsArray.length);
+
     let checkedItems = 0;
     checkItemsArray.forEach((item) => {
       if (item.state == 'complete') {
-        console.log(item);
+        //console.log(item);
         checkedItems++;
       }
     });
+    setTotalNumberOfItems(checkItemsArray.length);
     setNumberOfCheckedItems(checkedItems);
+    console.log('checkedItems', checkedItems);
   }, [checkItemsArray]);
-  console.log('number of checked items', numberOfCheckedItems);
+  //console.log('total number of items', totalNumberOfItems);
+  //console.log('number of checked items', numberOfCheckedItems);
 
   const handleClick = () => {
     setIsEditing(true);
@@ -103,16 +110,19 @@ const CheckList = ({ checklistId, setCardCheckLists }) => {
             </div>
           </Stack>
           <Stack direction="column">
-            <BorderLinearProgress
-              variant="determinate"
-              value={(numberOfCheckedItems / checkItemsArray.length) * 100}
-            />
+            {totalNumberOfItems > 0 && (
+              <BorderLinearProgress
+                variant="determinate"
+                value={(numberOfCheckedItems / totalNumberOfItems) * 100}
+              />
+            )}
             <FormGroup>
               {checkItemsArray &&
                 checkItemsArray.map((item) => {
                   return (
                     <>
                       <CheckItem
+                        setTotalNumberOfItems={setTotalNumberOfItems}
                         setNumberOfCheckedItems={setNumberOfCheckedItems}
                         cardId={checkListData.idCard}
                         setCheckItemsArray={setCheckItemsArray}
@@ -126,10 +136,16 @@ const CheckList = ({ checklistId, setCardCheckLists }) => {
             <AddCheckListItem
               checkListId={checklistId}
               setCheckItemsArray={setCheckItemsArray}
+              setTotalNumberOfItems={setTotalNumberOfItems}
             />
           </Stack>
         </Stack>
-        <Button
+        <DeleteItem
+          deleteFunction={deleteCheckList}
+          deleteFunctionParams={{ checklistId, setCardCheckLists }}
+          itemName={checkListData.name}
+        />
+        {/* <Button
           variant="contained"
           size="small"
           color="error"
@@ -139,12 +155,12 @@ const CheckList = ({ checklistId, setCardCheckLists }) => {
             height: 'fit-content',
           }}
           onClick={() => {
-            console.log('delete checklist');
+            //console.log('delete checklist');
             deleteCheckList(checklistId, setCardCheckLists);
           }}
         >
           Delete
-        </Button>
+        </Button> */}
       </Stack>
       <Button variant="contained" size="small" marginLeft={5}>
         Add an item

@@ -20,7 +20,7 @@ const useGetCardDetails = (cardId) => {
             setCardDetails(res.data);
             setLoading(false);
         }).catch(err => {
-            console.log(err);
+            //console.log(err);
             setLoading(false);
             setError(err);
         })

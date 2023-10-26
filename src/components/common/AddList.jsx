@@ -27,11 +27,11 @@ const AddList = ({ setBoard, boardId }) => {
         url: `https://api.trello.com/1/lists?name=${listValue}&idBoard=${boardId}&${lastUrl}`,
       })
         .then((res) => {
-          console.log('from add list', res.data);
+          //console.log('from add list', res.data);
           setBoard((prev) => [...prev, res.data]);
         })
         .catch((err) => {
-          console.log(err);
+          //console.log(err);
         });
     }
 
