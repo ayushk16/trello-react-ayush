@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Box } from '@mui/material';
 import { FiCheckSquare } from 'react-icons/fi';
 import useGetChecklists from '../../Hooks/GetCheckLists';
 import Button from '@mui/material/Button';
@@ -22,6 +22,8 @@ import DeleteItem from '../common/DeleteItem';
 import deleteCheckList from '../../Functions/deleteCheckList';
 
 import { styled } from '@mui/material/styles';
+import AddItem from '../common/AddItem';
+import addCheckItem from '../../Functions/addCheckItem';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -133,11 +135,17 @@ const CheckList = ({ checklistId, setCardCheckLists }) => {
                   );
                 })}
             </FormGroup>
-            <AddCheckListItem
-              checkListId={checklistId}
-              setCheckItemsArray={setCheckItemsArray}
-              setTotalNumberOfItems={setTotalNumberOfItems}
-            />
+            <Box sx={{ width: '100%' }}>
+              <AddItem
+                addFunction={addCheckItem}
+                addFunctionParams={{
+                  setCheckItemsArray,
+                  setTotalNumberOfItems,
+                  checklistId,
+                }}
+                itemName={'CheckItem'}
+              />
+            </Box>
           </Stack>
         </Stack>
         <DeleteItem
@@ -145,26 +153,7 @@ const CheckList = ({ checklistId, setCardCheckLists }) => {
           deleteFunctionParams={{ checklistId, setCardCheckLists }}
           itemName={checkListData.name}
         />
-        {/* <Button
-          variant="contained"
-          size="small"
-          color="error"
-          startIcon={<DeleteIcon />}
-          sx={{
-            justifySelf: 'flex-end',
-            height: 'fit-content',
-          }}
-          onClick={() => {
-            //console.log('delete checklist');
-            deleteCheckList(checklistId, setCardCheckLists);
-          }}
-        >
-          Delete
-        </Button> */}
       </Stack>
-      <Button variant="contained" size="small" marginLeft={5}>
-        Add an item
-      </Button>
     </>
   );
 };

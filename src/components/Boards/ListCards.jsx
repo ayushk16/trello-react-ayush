@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Modal, Button, Paper, Stack, Box, Typography } from '@mui/material';
 import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
 import useGetCards from '../../Hooks/GetCards';
-import AddCard from '../common/AddCard';
 import CardDetails from '../Cards/CardDetails';
-
+import AddItem from '../common/AddItem';
+import addCard from '../../Functions/addCard';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -77,7 +77,11 @@ const ListCards = ({ listId, setBoards }) => {
             </Paper>
           );
         })}
-        <AddCard listId={listId} setCards={setCards} />
+        <AddItem
+          addFunction={addCard}
+          addFunctionParams={{ setCards, listId }}
+          itemName={'Card'}
+        />
         <Modal
           open={open}
           onClose={handleClose}

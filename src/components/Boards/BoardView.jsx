@@ -9,8 +9,9 @@ import {
 } from '@mui/material';
 import React from 'react';
 import List from './List';
-import AddList from '../common/AddList';
 import useGetList from '../../Hooks/GetLists';
+import AddItem from '../common/AddItem';
+import addList from '../../Functions/addList';
 const BoardView = ({ id }) => {
   const { board, setBoard, loading, error } = useGetList(id);
   // //console.log('from boards view', board);
@@ -73,7 +74,11 @@ const BoardView = ({ id }) => {
               </Card>
             </Box> */}
             </Stack>
-            <AddList setBoard={setBoard} boardId={id} />
+            <AddItem
+              addFunction={addList}
+              addFunctionParams={{ setBoard, boardId: id }}
+              itemName={'List'}
+            />
           </Stack>
         </Container>
       </>
