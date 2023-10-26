@@ -17,7 +17,6 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { PiArchiveDuotone } from 'react-icons/pi';
 import useGetCardDetails from '../../Hooks/GetCardDetails';
 import { grey } from '@mui/material/colors';
-import CheckLists from './CheckLists';
 import CheckList from './CheckList';
 import useGetChecklists from '../../Hooks/GetCheckLists';
 import { red } from '@mui/material/colors';
@@ -92,7 +91,7 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
 
   return (
     <>
-      <Box sx={{ ...style }}>
+      <Box sx={{ ...style }} overflow="scroll">
         <Grid container spacing={2} height={800}>
           <Grid item xs={12} sm={9}>
             <div>
@@ -109,7 +108,12 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
               </Typography>
               {a ? (
                 a.map((checklist) => {
-                  return <CheckList checklistId={checklist.id} />;
+                  return (
+                    <CheckList
+                      checklistId={checklist.id}
+                      setCardCheckLists={setCardCheckLists}
+                    />
+                  );
                 })
               ) : (
                 <></>

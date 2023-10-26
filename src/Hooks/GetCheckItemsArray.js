@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const useGetChecklist = (checklistId) => {
-    const [checkListData, setCheckListData] = useState([]);
+const useGetCheckItemsArray = (checkListId) => {
+    const [checkItemsArray, setCheckItemsArray] = useState([]);
     const [loading, setLoading] = useState(null);
     const [error, setError] = useState(null);
 
@@ -10,22 +10,22 @@ const useGetChecklist = (checklistId) => {
         setLoading(true);
         axios({
             method: "GET",
-            url: `https://api.trello.com/1/checklists/${checklistId}`,
+            url: `https://api.trello.com/1/checklists/${checkListId}/checkItems`,
             params: {
                 key: import.meta.env.VITE_API_KEY,
                 token: import.meta.env.VITE_TOKEN
             }
         }).then(res => {
-            setCheckListData(res.data);
-            console.log('from api', res.data)
+            setCheckItemsArray(res.data);
+            console.log('from checkItemArray', res.data)
             setLoading(false);
         }).catch(err => {
             console.log(err);
             setLoading(false);
             setError(err);
         })
-    }, [useGetChecklist, checklistId, setCheckListData])
-    return ({ checkListData, setCheckListData, loading, error })
+    }, [useGetCheckItemsArray, checkListId])
+    return ({ checkItemsArray, setCheckItemsArray, loading, error })
 }
 
-export default useGetChecklist
+export default useGetCheckItemsArray

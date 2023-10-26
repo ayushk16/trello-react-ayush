@@ -24,7 +24,7 @@ const useGetCheckItem = (checkListId, checkItemId) => {
             setLoading(false);
             setError(err);
         })
-    }, [useGetCheckItem, checkItemId])
+    }, [useGetCheckItem, checkListId, checkItemId])
     return ({ checkItemData, setCheckItemData, loading, error })
 }
 

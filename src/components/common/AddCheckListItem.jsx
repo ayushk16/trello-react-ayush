@@ -16,7 +16,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const AddElement = ({ checkListId, setCheckListData }) => {
+const AddElement = ({ checkListId, setCheckItemsArray }) => {
   const [checkItemValue, setCheckItemValue] = React.useState('');
 
   const addValue = () => {
@@ -32,10 +32,7 @@ const AddElement = ({ checkListId, setCheckListData }) => {
       })
         .then((res) => {
           console.log('from add checkitem', res.data);
-          setCheckListData((prev) => ({
-            ...prev,
-            checkItems: [...prev.checkItems, res.data],
-          }));
+          setCheckItemsArray((prev) => [...prev, res.data]);
         })
         .catch((err) => {
           console.log(err);
