@@ -1,20 +1,13 @@
 import React, { useState } from 'react';
 
-import axios from 'axios';
-
 import { Box, Stack, TextField, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import FilledInput from '@mui/material/FilledInput';
 import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import Typography from '@mui/material/Typography';
-import { Block } from '@mui/icons-material';
-
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -57,7 +50,6 @@ const AddItem = ({ addFunction, addFunctionParams, itemName }) => {
             sx={
               !open
                 ? {
-                    //   display: 'Block',
                     height: '50px',
                     width: '100%',
                     padding: '10px',

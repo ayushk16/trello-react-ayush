@@ -1,30 +1,21 @@
 import React from 'react';
-import {
-  Container,
-  Box,
-  Stack,
-  Card,
-  CardContent,
-  Paper,
-  Typography,
-} from '@mui/material';
-import AddCard from '../common/AddCard';
 import axios from 'axios';
+
+import { Box, Stack, Card, CardContent, Typography } from '@mui/material';
 import { BiArchiveIn } from 'react-icons/bi';
+
 import ListCards from './ListCards';
 
 const List = ({ listId, listName, setBoard, board }) => {
   const archiveList = (listId) => {
-    const lastUrl = `key=537b641d27415d26a221d4f9cd736b2e&token=ATTA2aded428541342740a1e740389d73a90e8b6b943e5c1cbdf04788548355d5801612FEE20`;
     // //console.log('archiveList', listId);
     axios({
       method: 'PUT',
       url: `https://api.trello.com/1/lists/${listId}/closed`,
       params: {
         value: true,
-        key: '537b641d27415d26a221d4f9cd736b2e',
-        token:
-          'ATTA2aded428541342740a1e740389d73a90e8b6b943e5c1cbdf04788548355d5801612FEE20',
+        key: import.meta.env.VITE_API_KEY,
+        token: import.meta.env.VITE_TOKEN,
       },
     })
       .then((res) => {
@@ -58,7 +49,7 @@ const List = ({ listId, listName, setBoard, board }) => {
                 />
               </Typography>
             </Stack>
-            <ListCards listId={listId} setBoard={setBoard} />
+            <ListCards listId={listId} />
           </CardContent>
         </Card>
       </Box>

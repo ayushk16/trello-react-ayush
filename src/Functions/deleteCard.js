@@ -16,7 +16,7 @@ const deleteCard = async (cardId, setCards) => {
             })
         })
         .catch((err) => {
-            //console.log(err);
+            console.log(err);
         });
 }
 

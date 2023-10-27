@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import useGetCheckItem from '../../Hooks/GetCheckItem';
-import { Button, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
-import { Delete } from '@mui/icons-material';
 import DeleteItem from '../common/DeleteItem';
 import deleteCheckItem from '../../Functions/deleteCheckItem';
 
@@ -91,7 +88,6 @@ const CheckItem = ({
           >
             {checkItemData.name}
           </Typography>
-          {/* <Button color="error" onClick={() => {}}> */}
           <DeleteItem
             deleteFunction={deleteCheckItem}
             deleteFunctionParams={{
@@ -102,7 +98,6 @@ const CheckItem = ({
             }}
             itemName={checkItemData.name}
           />
-          {/* </Button> */}
         </div>
       }
     />

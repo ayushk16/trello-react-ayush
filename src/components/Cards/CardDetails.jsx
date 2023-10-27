@@ -1,6 +1,6 @@
 import React from 'react';
+
 import {
-  Modal,
   Box,
   Button,
   Typography,
@@ -9,38 +9,25 @@ import {
   Grid,
   Stack,
 } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
 import { RxCross2 } from 'react-icons/rx';
 import { FaCreditCard } from 'react-icons/fa';
-import { TbChecklist } from 'react-icons/tb';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { PiArchiveDuotone } from 'react-icons/pi';
-import useGetCardDetails from '../../Hooks/GetCardDetails';
-import { grey } from '@mui/material/colors';
-import CheckList from './CheckList';
-import useGetChecklists from '../../Hooks/GetCheckLists';
-import { red } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
+import Slide from '@mui/material/Slide';
 
 import deleteCard from '../../Functions/deleteCard';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import AddCheckList from './AddCheckList';
-import { Add } from '@mui/icons-material';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import CheckList from './CheckList';
+import AddCheckList from './AddCheckList';
+
+import useGetChecklists from '../../Hooks/GetCheckLists';
+import useGetCardDetails from '../../Hooks/GetCardDetails';
 
 const color = red[500];
 
 const style = {
-  position: 'absolute',
+  position: 'relative',
   top: '50%',
-  width: '70vw',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
@@ -66,17 +53,26 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
   if (loading) {
     return (
       <>
-        <Box sx={{ ...style }}>
-          <Grid container spacing={2} height={800}>
-            <Grid item xs={12} sm={6}>
+        <Box sx={{ ...style, width: '70vw' }}>
+          <RxCross2
+            style={{
+              position: 'absolute',
+              right: '5px',
+              top: '5px',
+              zIndex: 1000,
+              fontSize: '1.5rem',
+            }}
+            onClick={handleClose}
+          />
+          <Grid container spacing={2} height={800} position={'relative'}>
+            <Grid item xs={12} md={6}>
               <Box sx={{ width: 300 }}>
                 <Skeleton />
                 <Skeleton animation="wave" />
                 <Skeleton animation={false} />
               </Box>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <RxCross2 style={{ float: 'right' }} onClick={handleClose} />
+            <Grid item xs={12} md={6}>
               <Box sx={{ width: 300 }}>
                 <Skeleton />
                 <Skeleton animation="wave" />
@@ -91,9 +87,16 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
 
   return (
     <>
-      <Box sx={{ ...style }} overflow="scroll">
+      <Box sx={{ ...style, width: '70vw' }} overflow="scroll">
+        <RxCross2
+          style={{
+            float: 'right',
+            fontSize: '1.5rem',
+          }}
+          onClick={handleClose}
+        />
         <Grid container spacing={2} height={800}>
-          <Grid item xs={12} sm={9}>
+          <Grid item xs={12} md={9}>
             <div>
               <Stack direction="row" spacing={2}>
                 <Typography variant="h4" component="h2">
@@ -123,17 +126,13 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
           <Grid
             item
             xs={12}
-            sm={3}
+            md={3}
             style={{
               display: 'flex',
               flexDirection: 'column',
               // alignContent: 'end',
             }}
           >
-            <RxCross2
-              style={{ alignSelf: 'flex-end', fontSize: '1.5rem' }}
-              onClick={handleClose}
-            />
             <Typography variant="body2" color={grey}>
               Add to card
             </Typography>

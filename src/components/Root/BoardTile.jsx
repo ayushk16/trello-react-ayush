@@ -1,11 +1,13 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Grid } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import useGetBoardTile from '../../Hooks/GetBoardTile';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
-import { useNavigate } from 'react-router-dom';
+
+import useGetBoardTile from '../../Hooks/GetBoardTile';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -22,8 +24,8 @@ const BoardTile = ({ id }) => {
   if (loading) {
     return (
       <>
-        <Grid item xs={3}>
-          <Box sx={{ width: 300 }}>
+        <Grid width={'auto'} item xs={12} sm={6} md={4} lg={3}>
+          <Box sx={{ width: 'auto' }}>
             <Skeleton width={250} />
             <Skeleton
               variant="rectangular"
@@ -40,7 +42,7 @@ const BoardTile = ({ id }) => {
   if (error) {
     return (
       <>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
           <Box
             sx={{
               width: 'auto',
@@ -72,7 +74,10 @@ const BoardTile = ({ id }) => {
       <>
         <Grid
           item
-          xs={3}
+          xs={12}
+          sm={6}
+          md={4}
+          lg={3}
           onClick={() => navigate(`/boards/${id}`)}
           marginTop={2}
         >

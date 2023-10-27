@@ -1,18 +1,16 @@
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import AddElement from '../common/AddElement';
 import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
+
 import useGetHome from '../../Hooks/GetHome';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
+
 import BoardTile from './BoardTile';
-import Stack from '@mui/material/Stack';
+import AddItem from '../common/AddItem';
+import addBoard from '../../Functions/addBoard';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -67,8 +65,21 @@ const BoardsContainer = () => {
             {boards.map((item) => {
               return <BoardTile id={item.id} />;
             })}
-            <Grid item xs={3}>
-              <AddElement setBoards={setBoards} />
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              display={'flex'}
+              alignItems={'center'}
+              height={300}
+            >
+              <AddItem
+                addFunction={addBoard}
+                addFunctionParams={{ setBoards }}
+                itemName={'Board'}
+              />
             </Grid>
           </Grid>
         </Container>

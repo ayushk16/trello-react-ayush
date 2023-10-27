@@ -17,7 +17,7 @@ const addCheckItem = async ({ setCheckItemsArray, setTotalNumberOfItems, checkli
             setTotalNumberOfItems((prev) => prev + 1);
         })
         .catch((err) => {
-            //console.log(err);
+            console.log(err);
         });
 }
 

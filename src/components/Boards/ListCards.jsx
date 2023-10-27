@@ -1,10 +1,12 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Modal, Button, Paper, Stack, Box, Typography } from '@mui/material';
-import { AiOutlineDelete, AiOutlineEdit } from 'react-icons/ai';
+import { Modal, Paper, Stack, Box, Typography } from '@mui/material';
+import { AiOutlineEdit } from 'react-icons/ai';
+
 import useGetCards from '../../Hooks/GetCards';
+
 import CardDetails from '../Cards/CardDetails';
 import AddItem from '../common/AddItem';
+
 import addCard from '../../Functions/addCard';
 const style = {
   position: 'absolute',
@@ -20,7 +22,7 @@ const style = {
   pb: 3,
 };
 
-const ListCards = ({ listId, setBoards }) => {
+const ListCards = ({ listId }) => {
   const [open, setOpen] = React.useState(false);
   const [modalCardId, setModalCardId] = React.useState(null);
   const handleOpen = () => {
@@ -31,7 +33,6 @@ const ListCards = ({ listId, setBoards }) => {
     setOpen(false);
   };
 
-  const navigate = useNavigate();
   const { cards, setCards, loading, error } = useGetCards(listId);
   if (loading) {
     return (
@@ -84,6 +85,8 @@ const ListCards = ({ listId, setBoards }) => {
         />
         <Modal
           open={open}
+          // xs={{ width: '100vw' }}
+          // md={{ width: '80vw' }}
           onClose={handleClose}
           aria-labelledby="parent-modal-title"
           aria-describedby="parent-modal-description"

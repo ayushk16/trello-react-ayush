@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Slide from '@mui/material/Slide';
@@ -17,6 +16,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function AddCheckList({ cardId, setCardCheckLists }) {
   const [open, setOpen] = React.useState(false);
+  const [checkListName, setCheckListName] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -25,7 +25,6 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
   const handleClose = () => {
     setOpen(false);
   };
-  const [checkListName, setCheckListName] = useState('');
 
   const addValue = () => {
     if (checkListName) {
@@ -55,13 +54,7 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
     <>
       <Button variant="contained" color="secondary" onClick={handleClickOpen}>
         <TbChecklist style={{ alignSelf: 'flex-end', fontSize: '1.5rem' }} />
-        <Typography
-          variant="body2"
-          marginLeft={1}
-          onClick={() => {
-            // //console.log('checklist add');
-          }}
-        >
+        <Typography variant="body2" marginLeft={1}>
           CHECKLIST
         </Typography>
       </Button>

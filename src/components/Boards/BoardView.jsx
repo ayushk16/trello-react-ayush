@@ -1,17 +1,14 @@
-import {
-  Container,
-  Box,
-  Stack,
-  Card,
-  CardContent,
-  Paper,
-  Typography,
-} from '@mui/material';
 import React from 'react';
-import List from './List';
+
+import { Container, Box, Stack } from '@mui/material';
+
 import useGetList from '../../Hooks/GetLists';
+
+import List from './List';
 import AddItem from '../common/AddItem';
+
 import addList from '../../Functions/addList';
+
 const BoardView = ({ id }) => {
   const { board, setBoard, loading, error } = useGetList(id);
   // //console.log('from boards view', board);
@@ -33,20 +30,21 @@ const BoardView = ({ id }) => {
   } else {
     return (
       <>
-        {/* <div>
-          {board.map((list) => {
-            return <div>{list.name}</div>;
-          })}
-        </div> */}
         <Container>
           <Stack
             spacing={2}
-            direction="row"
             display="flex"
+            direction="row"
             flexWrap="wrap"
             marginY={4}
           >
-            <Stack marginTop={3} gap={5} direction="row" overflow="scroll">
+            <Stack
+              marginTop={3}
+              gap={5}
+              direction={'row'}
+              overflow="scroll"
+              height={'80vh'}
+            >
               {board.map((list) => {
                 return (
                   <>
@@ -60,25 +58,14 @@ const BoardView = ({ id }) => {
                 );
               })}
 
-              {/* <Box>
-              <Card
-                sx={{
-                  backgroundColor: '#f5f5f5',
-                }}
-              >
-                <CardContent>
-                  <Paper elevation={4}>
-                    <h1>Board View</h1>
-                  </Paper>
-                </CardContent>
-              </Card>
-            </Box> */}
+              <Box width="auto" minWidth={300} maxWidth={500} paddingX={4}>
+                <AddItem
+                  addFunction={addList}
+                  addFunctionParams={{ setBoard, boardId: id }}
+                  itemName={'List'}
+                />
+              </Box>
             </Stack>
-            <AddItem
-              addFunction={addList}
-              addFunctionParams={{ setBoard, boardId: id }}
-              itemName={'List'}
-            />
           </Stack>
         </Container>
       </>

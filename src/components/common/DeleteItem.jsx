@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,7 +12,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
-  //console.log(deleteFunctionParams);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

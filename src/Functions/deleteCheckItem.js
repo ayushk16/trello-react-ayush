@@ -19,7 +19,7 @@ const deleteCheckItem = ({ setTotalNumberOfItems, checkItemId, checkListId, setC
 
         })
         .catch((err) => {
-            //console.log(err);
+            console.log(err);
         });
 }
 

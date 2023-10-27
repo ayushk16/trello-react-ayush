@@ -17,7 +17,7 @@ const deleteCard = ({ checklistId, setCardCheckLists }) => {
             })
         })
         .catch((err) => {
-            //console.log(err);
+            console.log(err);
         });
 }
 
