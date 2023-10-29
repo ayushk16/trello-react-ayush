@@ -8,7 +8,6 @@ import ListCards from './ListCards';
 
 const List = ({ listId, listName, setBoard, board }) => {
   const archiveList = (listId) => {
-    // //console.log('archiveList', listId);
     axios({
       method: 'PUT',
       url: `https://api.trello.com/1/lists/${listId}/closed`,
@@ -19,11 +18,11 @@ const List = ({ listId, listName, setBoard, board }) => {
       },
     })
       .then((res) => {
-        // //console.log('archive list', res.data);
+        //console.log('archive list', res.data);
         setBoard(() => board.filter((list) => list.id !== listId));
       })
       .catch((err) => {
-        // //console.log(err);
+        console.log('error in archieving list ', err);
       });
   };
 
@@ -43,13 +42,14 @@ const List = ({ listId, listName, setBoard, board }) => {
               <Typography component="h2" variant="h6" marginBottom={2}>
                 <BiArchiveIn
                   onClick={() => {
-                    // //console.log(listId);
                     archiveList(listId);
                   }}
                 />
               </Typography>
             </Stack>
-            <ListCards listId={listId} />
+            <Stack direction={'column'} spacing={3}>
+              <ListCards listId={listId} />
+            </Stack>
           </CardContent>
         </Card>
       </Box>

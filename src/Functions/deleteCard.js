@@ -10,13 +10,12 @@ const deleteCard = async (cardId, setCards) => {
         },
     })
         .then((res) => {
-            //console.log("from delete card", res.data);
             setCards((prev) => {
                 return prev.filter((card) => { return card.id !== cardId })
             })
         })
         .catch((err) => {
-            console.log(err);
+            console.log('error in deleteCard in function', err);
         });
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const useGetCheckItemsArray = (checkListId) => {
@@ -17,10 +17,9 @@ const useGetCheckItemsArray = (checkListId) => {
             }
         }).then(res => {
             setCheckItemsArray(res.data);
-            //console.log('from checkItemArray', res.data)
             setLoading(false);
         }).catch(err => {
-            //console.log(err);
+            console.log('error in GetCheckItemsArray in hooks', err);
             setLoading(false);
             setError(err);
         })

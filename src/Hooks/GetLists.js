@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -18,11 +18,10 @@ const useGetList = (boardId) => {
         })
             .then((res) => {
                 setBoard(res.data);
-                //console.log(res.data);
                 setLoading(false);
             })
             .catch(err => {
-                //console.log(err);
+                console.log('error in GetList in hooks', err);
                 setLoading(false);
                 setError(err);
             })

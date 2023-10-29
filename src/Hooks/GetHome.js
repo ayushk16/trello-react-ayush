@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -21,7 +21,7 @@ const useGetHome = () => {
                 setLoading(false);
             })
             .catch(err => {
-                //console.log(err);
+                console.log('error in GetHome in hooks', err);
                 setLoading(false);
                 setError(err);
             })

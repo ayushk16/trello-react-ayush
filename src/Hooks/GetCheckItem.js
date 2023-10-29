@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const useGetCheckItem = (checkListId, checkItemId) => {
@@ -17,10 +17,9 @@ const useGetCheckItem = (checkListId, checkItemId) => {
             }
         }).then(res => {
             setCheckItemData(res.data);
-            //console.log('from api', res.data)
             setLoading(false);
         }).catch(err => {
-            //console.log(err);
+            console.log('error in GetCheckItem in hooks', err);
             setLoading(false);
             setError(err);
         })

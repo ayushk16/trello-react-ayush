@@ -1,107 +1,127 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import useGetCheckItem from '../../Hooks/GetCheckItem';
-import { Typography } from '@mui/material';
+import {
+  Typography,
+  FormControlLabel,
+  Checkbox,
+  Skeleton,
+} from '@mui/material';
 
-import FormControlLabel from '@mui/material/FormControlLabel';
+import updateCheckItem from '../../Functions/updateCheckItem';
 
-import Checkbox from '@mui/material/Checkbox';
+import { ACTION as CHECKACTION } from '../../reducers/GetCheckedUnchecked';
+
 import DeleteItem from '../common/DeleteItem';
+
+// import useGetCheckItem from '../../Hooks/GetCheckItem';
+import useGetCheckItem from '../../reducers/GetCheckItem';
+
 import deleteCheckItem from '../../Functions/deleteCheckItem';
 
 const CheckItem = ({
-  setTotalNumberOfItems,
-  setNumberOfCheckedItems,
+  checkStatusDispatch,
   cardId,
-  setCheckItemsArray,
+  checkItemsArrayDispatch,
   checkListId,
   checkItemId,
 }) => {
-  const { checkItemData, setCheckItemData, loading, error } = useGetCheckItem(
-    checkListId,
-    checkItemId
-  );
-  const [checkedStatus, setCheckedStatus] = useState(false);
+  const { state: checkItemData, dispatch: checkItemDataDispatch } =
+    useGetCheckItem(checkListId, checkItemId);
+
+  const [checkedStatus, setCheckedStatus] = useState(true);
 
   useEffect(() => {
-    setCheckedStatus(checkItemData.state == 'complete');
-    //console.log(checkItemData.name, checkItemData.state);
+    checkItemData &&
+      checkItemData.data.state &&
+      setCheckedStatus(checkItemData.data.state === 'complete' ? true : false);
   }, [checkItemData]);
 
-  useEffect(() => {
-    axios({
-      method: 'PUT',
-      url: `https://api.trello.com/1/cards/${cardId}/checkItem/${checkItemId}`,
-      params: {
-        state: checkedStatus ? 'complete' : 'incomplete',
-        key: import.meta.env.VITE_API_KEY,
-        token: import.meta.env.VITE_TOKEN,
-      },
-    }).then((res) => {
-      console.log(res.data);
-      setCheckItemsArray((prev) => {
-        return prev.map((item) => {
-          if (item.id == checkItemId) {
-            return res.data;
-          }
-          return item;
-        });
+  const handleCheck = (isCheck) => {
+    if (isCheck) {
+      console.log('checked');
+      updateCheckItem({
+        checkItemsArrayDispatch,
+        checkedStatus: isCheck,
+        checkItemDataDispatch,
+        cardId,
+        checkItemId,
       });
-    });
-  }, [checkedStatus]);
-
-  const handleCheck = () => {
-    if (checkedStatus) {
-      setNumberOfCheckedItems((prev) => prev - 1);
+      checkStatusDispatch(CHECKACTION.EDITCHECKITEM.CHECKED);
     } else {
-      setNumberOfCheckedItems((prev) => prev + 1);
+      console.log('unchecked');
+      updateCheckItem({
+        checkItemsArrayDispatch,
+        checkedStatus: isCheck,
+        checkItemDataDispatch,
+        cardId,
+        checkItemId,
+      });
+      checkStatusDispatch(CHECKACTION.EDITCHECKITEM.UNCHECKED);
     }
   };
-  // //console.log('from chekitem', checkItemData.name, checkItemData.state);
 
-  return (
-    <FormControlLabel
-      control={
-        <Checkbox
-          onChange={(e) => {
-            //console.log(e.target.checked);
-            setCheckedStatus(e.target.checked);
-            handleCheck();
-          }}
-          checked={checkedStatus}
-        />
-      }
-      label={
-        <div
-          style={{
-            width: '400px',
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Typography
-            variant="h5"
-            component="h3"
-            {...(checkedStatus
-              ? { style: { textDecoration: 'line-through' } }
-              : {})}
-          >
-            {checkItemData.name}
+  if (checkItemData.loading) {
+    return (
+      <>
+        <Skeleton animation="wave" variant="rectangular" width={'100%'} />
+      </>
+    );
+  }
+
+  if (checkItemData.error) {
+    return (
+      <>
+        <>
+          <Typography variant="h5" component="h3">
+            Something went wrong...
           </Typography>
-          <DeleteItem
-            deleteFunction={deleteCheckItem}
-            deleteFunctionParams={{
-              setTotalNumberOfItems,
-              checkItemId,
-              checkListId,
-              setCheckItemsArray,
+        </>
+      </>
+    );
+  } else {
+    return (
+      <FormControlLabel
+        control={
+          <Checkbox
+            onChange={(e) => {
+              setCheckedStatus(e.target.checked);
+              handleCheck(e.target.checked);
             }}
-            itemName={checkItemData.name}
+            checked={checkedStatus}
           />
-        </div>
-      }
-    />
-  );
+        }
+        label={
+          <div
+            style={{
+              width: '400px',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography
+              variant="h5"
+              component="h3"
+              {...(checkedStatus
+                ? { style: { textDecoration: 'line-through' } }
+                : {})}
+            >
+              {checkItemData.data.name}
+            </Typography>
+            <DeleteItem
+              deleteFunction={deleteCheckItem}
+              deleteFunctionParams={{
+                checkItemId,
+                checkListId,
+                checkItemsArrayDispatch,
+                checkStatusDispatch,
+              }}
+              itemName={checkItemData.data.name}
+            />
+          </div>
+        }
+      />
+    );
+  }
 };
 
 export default CheckItem;

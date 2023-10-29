@@ -1,10 +1,11 @@
 import axios from "axios";
+import { ACTION } from '../reducers/GetCheckItemsArray';
+import { ACTION as CHECKACTION } from '../reducers/GetCheckedUnchecked';
 
-const addCheckItem = async ({ setCheckItemsArray, setTotalNumberOfItems, checklistId, value }) => {
-    console.log('addCheckItem function', checklistId, ' % ', value, setCheckItemsArray, setTotalNumberOfItems)
+const addCheckItem = async ({ checkItemsArrayDispatch, setTotalNumberOfItems, checkStatusDispatch, checkListId, value }) => {
     axios({
         method: 'POST',
-        url: `https://api.trello.com/1/checklists/${checklistId}/checkItems`,
+        url: `https://api.trello.com/1/checklists/${checkListId}/checkItems`,
         params: {
             name: value,
             key: import.meta.env.VITE_API_KEY,
@@ -12,12 +13,12 @@ const addCheckItem = async ({ setCheckItemsArray, setTotalNumberOfItems, checkli
         },
     })
         .then((res) => {
-            //console.log('from add checkitem', res.data);
-            setCheckItemsArray((prev) => [...prev, res.data]);
-            setTotalNumberOfItems((prev) => prev + 1);
+            checkItemsArrayDispatch({ type: ACTION.ADDCHECKITEMS.SUCCESS, payload: res.data });
+            checkStatusDispatch({ type: CHECKACTION.ADDCHECKITEM });
         })
         .catch((err) => {
-            console.log(err);
+            console.log('error in addCheckItem in functions', err);
+            checkItemsArrayDispatch({ type: ACTION.ADDCHECKITEMS.ERROR });
         });
 }
 

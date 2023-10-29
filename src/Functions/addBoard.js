@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const addBoard = async ({ setBoards, value }) => {
-    console.log('addBoard function', value, ' % ', setBoards)
+import { ACTION } from "../reducers/GetBoards";
+const addBoard = async ({ boardsDispatch, value }) => {
     axios({
         method: 'POST',
         url: `https://api.trello.com/1/boards/`,
@@ -12,11 +12,17 @@ const addBoard = async ({ setBoards, value }) => {
         },
     })
         .then((res) => {
-            console.log('from add board', res.data);
-            setBoards((prev) => [...prev, res.data]);
+            boardsDispatch(
+                {
+                    type: ACTION.ADDBOARD.SUCCESS,
+                    payload: res.data
+                }
+            )
         })
         .catch((err) => {
+            alert('You reached the limit of boards, please delete some boards to add new one.');
             console.log(err);
+            boardsDispatch({ type: ACTION.ADDBOARD.ERROR })
         });
 }
 

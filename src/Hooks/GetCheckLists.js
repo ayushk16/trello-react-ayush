@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -18,10 +18,9 @@ const useGetChecklists = (cardId) => {
             }
         }).then(res => {
             setCardCheckLists(res.data);
-            //console.log('from api', res.data)
             setLoading(false);
         }).catch(err => {
-            //console.log(err);
+            console.log('error in GetCheckLists in hooks', err);
             setLoading(false);
             setError(err);
         })

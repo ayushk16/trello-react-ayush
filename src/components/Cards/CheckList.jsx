@@ -1,21 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { Typography, Stack, Box } from '@mui/material';
-import FormGroup from '@mui/material/FormGroup';
+import React from 'react';
+import {
+  Typography,
+  Stack,
+  Box,
+  Paper,
+  Skeleton,
+  FormGroup,
+  Card,
+  CardContent,
+} from '@mui/material';
 import { FiCheckSquare } from 'react-icons/fi';
 import LinearProgress, {
   linearProgressClasses,
 } from '@mui/material/LinearProgress';
 import { styled } from '@mui/material/styles';
 
-import useGetChecklist from '../../Hooks/GetCheckList';
-import useGetCheckItemsArray from '../../Hooks/GetCheckItemsArray';
-
 import CheckItem from './CheckItem';
 import DeleteItem from '../common/DeleteItem';
 import AddItem from '../common/AddItem';
 
+// import useGetChecklist from '../../Hooks/GetCheckList';
+// import useGetCheckItemsArray from '../../Hooks/GetCheckItemsArray';
+import useGetCheckItemsArray from '../../reducers/GetCheckItemsArray';
+
 import deleteCheckList from '../../Functions/deleteCheckList';
 import addCheckItem from '../../Functions/addCheckItem';
+import useGetCheckedUnchecked from '../../reducers/GetCheckedUnchecked';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -30,98 +40,208 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   },
 }));
 
-const CheckList = ({ checklistId, setCardCheckLists }) => {
-  const { checkListData, setCheckListData, loading, error } =
-    useGetChecklist(checklistId);
-  //console.log('from cheklsit', checkListData);
-  const { checkItemsArray, setCheckItemsArray } =
-    useGetCheckItemsArray(checklistId);
-  //console.log('checkithm', checkItemsArray);
+const CheckList = ({
+  checkListId,
+  checkListName,
+  cardId,
+  cardCheckListsDispatch,
+}) => {
+  const { state: checkItemsArray, dispatch: checkItemsArrayDispatch } =
+    useGetCheckItemsArray(checkListId);
+  const { state: checkItemsStatus, dispatch: checkStatusDispatch } =
+    useGetCheckedUnchecked(checkItemsArray);
 
-  const [numberOfCheckedItems, setNumberOfCheckedItems] = useState(0);
-  const [totalNumberOfItems, setTotalNumberOfItems] = useState(0);
-
-  useEffect(() => {
-    console.log('checkItemsArray', checkItemsArray.length);
-    let checkedItems = 0;
-    checkItemsArray.forEach((item) => {
-      if (item.state == 'complete') {
-        //console.log(item);
-        checkedItems++;
-      }
-    });
-    setTotalNumberOfItems(checkItemsArray.length);
-    setNumberOfCheckedItems(checkedItems);
-    console.log('checkedItems', checkedItems);
-  }, [checkItemsArray]);
-  //console.log('total number of items', totalNumberOfItems);
-  //console.log('number of checked items', numberOfCheckedItems);
-
-  return (
-    <>
-      <Stack
-        direction="row"
-        spacing={2}
-        md={{ display: 'flex', justifyContent: 'space-between' }}
-        sx={{ display: 'flex', justifyContent: 'flex-start' }}
-        marginTop={3}
-      >
-        <Stack spacing={2} direction="column">
-          <Stack spacing={2} direction="row">
-            <Typography variant="h6" component="h2">
-              <FiCheckSquare />
-            </Typography>
-            <div id={checkListData.id}>
-              <Typography variant="h6" component="h2">
-                {checkListData.name}
-              </Typography>
-            </div>
-          </Stack>
-          <DeleteItem
-            deleteFunction={deleteCheckList}
-            deleteFunctionParams={{ checklistId, setCardCheckLists }}
-            itemName={checkListData.name}
-          />
-          <Stack direction="column">
-            {totalNumberOfItems > 0 && (
-              <BorderLinearProgress
-                variant="determinate"
-                value={(numberOfCheckedItems / totalNumberOfItems) * 100}
-              />
-            )}
-            <FormGroup>
-              {checkItemsArray &&
-                checkItemsArray.map((item) => {
-                  return (
-                    <>
-                      <CheckItem
-                        setTotalNumberOfItems={setTotalNumberOfItems}
-                        setNumberOfCheckedItems={setNumberOfCheckedItems}
-                        cardId={checkListData.idCard}
-                        setCheckItemsArray={setCheckItemsArray}
-                        checkListId={checklistId}
-                        checkItemId={item.id}
+  if (checkItemsArray.loading) {
+    return (
+      <>
+        <Card sx={{ marginY: '50px', backgroundColor: ' #F6FDC3' }}>
+          <CardContent>
+            <Stack
+              direction="row"
+              spacing={2}
+              md={{ display: 'flex', justifyContent: 'space-between' }}
+              sx={{ display: 'flex', justifyContent: 'flex-start' }}
+              marginTop={3}
+              borderBottom={1}
+            >
+              <Stack spacing={2} direction="column">
+                <Stack spacing={2} direction="row">
+                  <Typography variant="h6" component="h2">
+                    <FiCheckSquare />
+                  </Typography>
+                  <div id={checkListId}>
+                    <Typography variant="h6" component="h2">
+                      {checkListName}
+                    </Typography>
+                  </div>
+                </Stack>
+                <DeleteItem
+                  deleteFunction={deleteCheckList}
+                  deleteFunctionParams={{ checkListId, cardCheckListsDispatch }}
+                  itemName={checkListName}
+                />
+                <Stack direction="column">
+                  <FormGroup>
+                    <Paper>
+                      <Skeleton></Skeleton>
+                    </Paper>
+                  </FormGroup>
+                  <Box sx={{ minWidth: '200px', width: '100%' }}>
+                    <AddItem
+                      addFunction={addCheckItem}
+                      addFunctionParams={{
+                        checkItemsArrayDispatch,
+                        checkStatusDispatch,
+                        checkListId,
+                      }}
+                      itemName={'CheckItem'}
+                    />
+                  </Box>
+                </Stack>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      </>
+    );
+  }
+  if (checkItemsArray.error) {
+    return (
+      <>
+        <Card sx={{ marginY: '50px', backgroundColor: ' #F6FDC3' }}>
+          <CardContent>
+            <Stack
+              direction="row"
+              spacing={2}
+              md={{ display: 'flex', justifyContent: 'space-between' }}
+              sx={{ display: 'flex', justifyContent: 'flex-start' }}
+              marginTop={3}
+              borderBottom={1}
+            >
+              <Stack spacing={2} direction="column">
+                <Stack spacing={2} direction="row">
+                  <Typography variant="h6" component="h2">
+                    <FiCheckSquare />
+                  </Typography>
+                  <div>
+                    <Typography variant="h6" component="h2">
+                      {checkListName}
+                    </Typography>
+                  </div>
+                </Stack>
+                <DeleteItem
+                  deleteFunction={deleteCheckList}
+                  deleteFunctionParams={{ checkListId, cardCheckListsDispatch }}
+                  itemName={checkListName}
+                />
+                <Stack direction="column">
+                  <FormGroup>
+                    <Paper>
+                      <Typography variant="h6" color="error">
+                        {checkItemsArray.error.length > 0 ? (
+                          <div>{checkItemsArray.error}</div>
+                        ) : (
+                          <div>flase</div>
+                        )}
+                        {/* error... */}
+                      </Typography>
+                    </Paper>
+                  </FormGroup>
+                  <Box sx={{ minWidth: '200px', width: '100%' }}>
+                    <AddItem
+                      addFunction={addCheckItem}
+                      addFunctionParams={{
+                        checkItemsArrayDispatch,
+                        checkStatusDispatch,
+                        checkListId,
+                      }}
+                      itemName={'CheckItem'}
+                    />
+                  </Box>
+                </Stack>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Card sx={{ marginY: '50px', backgroundColor: ' #F6FDC3' }}>
+          <CardContent>
+            <Stack
+              direction="row"
+              spacing={2}
+              md={{ display: 'flex', justifyContent: 'space-between' }}
+              sx={{ display: 'flex', justifyContent: 'flex-start' }}
+              marginTop={3}
+            >
+              <Stack spacing={2} direction="column">
+                <Stack spacing={2} direction="row">
+                  <Typography variant="h6" component="h2">
+                    <FiCheckSquare />
+                  </Typography>
+                  <div id={checkListId}>
+                    <Typography variant="h6" component="h2">
+                      {checkListName}
+                    </Typography>
+                  </div>
+                </Stack>
+                <DeleteItem
+                  deleteFunction={deleteCheckList}
+                  deleteFunctionParams={{ checkListId, cardCheckListsDispatch }}
+                  itemName={checkListName}
+                />
+                <Stack direction="column">
+                  {/* <ProgressBar></ProgressBar> */}
+                  {checkItemsStatus &&
+                    checkItemsStatus.totalNumberOfItems > 0 && (
+                      <BorderLinearProgress
+                        variant="determinate"
+                        value={
+                          (checkItemsStatus.numberOfCheckedItems /
+                            checkItemsStatus.totalNumberOfItems) *
+                          100
+                        }
                       />
-                    </>
-                  );
-                })}
-            </FormGroup>
-            <Box sx={{ minWidth: '200px', width: '100%' }}>
-              <AddItem
-                addFunction={addCheckItem}
-                addFunctionParams={{
-                  setCheckItemsArray,
-                  setTotalNumberOfItems,
-                  checklistId,
-                }}
-                itemName={'CheckItem'}
-              />
-            </Box>
-          </Stack>
-        </Stack>
-      </Stack>
-    </>
-  );
+                    )}
+                  <FormGroup>
+                    {checkItemsArray.data &&
+                      checkItemsArray.data.map((item) => {
+                        return (
+                          <>
+                            <CheckItem
+                              key={item.id}
+                              checkStatusDispatch={checkStatusDispatch}
+                              cardId={cardId}
+                              checkItemsArrayDispatch={checkItemsArrayDispatch}
+                              checkListId={checkListId}
+                              checkItemId={item.id}
+                            />
+                          </>
+                        );
+                      })}
+                  </FormGroup>
+                  <Box sx={{ minWidth: '200px', width: '100%' }}>
+                    <AddItem
+                      addFunction={addCheckItem}
+                      addFunctionParams={{
+                        checkItemsArrayDispatch,
+                        checkStatusDispatch,
+                        checkListId,
+                      }}
+                      itemName={'CheckItem'}
+                    />
+                  </Box>
+                </Stack>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      </>
+    );
+  }
 };
 
 export default CheckList;

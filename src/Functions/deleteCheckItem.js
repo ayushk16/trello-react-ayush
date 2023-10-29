@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const deleteCheckItem = ({ setTotalNumberOfItems, checkItemId, checkListId, setCheckItemsArray }) => {
+import { ACTION } from '../reducers/GetCheckItemsArray';
+import { ACTION as CHECKACTION } from '../reducers/GetCheckedUnchecked';
+
+const deleteCheckItem = ({ checkItemId, checkListId, checkItemsArrayDispatch, checkStatusDispatch }) => {
     axios({
         method: 'DELETE',
         url: `https://api.trello.com/1/checklists/${checkListId}/checkItems/${checkItemId}`,
@@ -10,16 +13,17 @@ const deleteCheckItem = ({ setTotalNumberOfItems, checkItemId, checkListId, setC
         },
     })
         .then((res) => {
-            console.log("from delete checklist", res.data);
-            setCheckItemsArray((prev) => {
-                return prev.filter((item) => item.id !== checkItemId);
-            });
-            // setTotalNumberOfItems(prev => prev - 1);
-            //console.log('ok');
-
+            checkItemsArrayDispatch({
+                type: ACTION.DELETECHECKITEMS.SUCCESS,
+                payload: checkItemId,
+            })
+            checkStatusDispatch({ type: CHECKACTION.DELETECHECKITEM })
         })
         .catch((err) => {
-            console.log(err);
+            console.log('error in deleteCheckItem in functions', err);
+            checkItemsArrayDispatch({
+                type: ACTION.DELETECHECKITEMS.ERROR,
+            });
         });
 }
 

@@ -1,16 +1,21 @@
-import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import React from 'react';
-import Skeleton from '@mui/material/Skeleton';
-
-import useGetHome from '../../Hooks/GetHome';
+import {
+  styled,
+  Button,
+  Typography,
+  Box,
+  Container,
+  Grid,
+  Paper,
+  Skeleton,
+} from '@mui/material';
 
 import BoardTile from './BoardTile';
 import AddItem from '../common/AddItem';
 import addBoard from '../../Functions/addBoard';
+
+// import useGetHome from '../../Hooks/GetHome';
+import useGetBoards from '../../reducers/GetBoards';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -21,10 +26,9 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const BoardsContainer = () => {
-  const { boards, setBoards, loading, error } = useGetHome();
-  // //console.log('from boardsContainer', boards);
+  const { state: boardsData, dispatch: boardsDispatch } = useGetBoards();
 
-  if (loading) {
+  if (boardsData.loading) {
     return (
       <Container>
         <Grid
@@ -33,25 +37,54 @@ const BoardsContainer = () => {
           columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           marginTop={3}
         >
-          {(loading ? Array.from(new Array(3)) : data).map((item, index) => (
-            <Box sx={{ width: 300 }}>
-              <Skeleton width={250} />
-              <Skeleton
-                variant="rectangular"
-                height={300}
-                width={250}
-                animation="wave"
-              />
-              <Skeleton width={250} animation={false} />
-            </Box>
-          ))}
+          {(boardsData.loading ? Array.from(new Array(3)) : data).map(
+            (item, index) => (
+              <Box sx={{ width: 300 }} key={index}>
+                <Skeleton width={250} />
+                <Skeleton
+                  variant="rectangular"
+                  height={300}
+                  width={250}
+                  animation="wave"
+                />
+                <Skeleton width={250} animation={false} />
+              </Box>
+            )
+          )}
         </Grid>
       </Container>
     );
   }
 
-  if (error) {
-    return <div>Error...</div>;
+  if (boardsData.error !== '') {
+    return (
+      <Container>
+        <Grid
+          container
+          rowSpacing={1}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          marginTop={3}
+        >
+          <Grid item xs={12}>
+            <Item>
+              <Typography variant="h3" component="h1">
+                You reached the limit of boards, please delete some boards to
+                add new one.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Refresh Page!
+              </Button>
+            </Item>
+          </Grid>
+        </Grid>
+      </Container>
+    );
   } else {
     return (
       <>
@@ -62,8 +95,8 @@ const BoardsContainer = () => {
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             marginTop={3}
           >
-            {boards.map((item) => {
-              return <BoardTile id={item.id} />;
+            {boardsData.data.map((item) => {
+              return <BoardTile id={item.id} key={item.id} />;
             })}
             <Grid
               item
@@ -77,7 +110,7 @@ const BoardsContainer = () => {
             >
               <AddItem
                 addFunction={addBoard}
-                addFunctionParams={{ setBoards }}
+                addFunctionParams={{ boardsDispatch }}
                 itemName={'Board'}
               />
             </Grid>

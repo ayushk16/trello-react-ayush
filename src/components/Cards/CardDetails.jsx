@@ -13,15 +13,15 @@ import { RxCross2 } from 'react-icons/rx';
 import { FaCreditCard } from 'react-icons/fa';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { grey, red } from '@mui/material/colors';
-import Slide from '@mui/material/Slide';
-
-import deleteCard from '../../Functions/deleteCard';
 
 import CheckList from './CheckList';
 import AddCheckList from './AddCheckList';
 
-import useGetChecklists from '../../Hooks/GetCheckLists';
 import useGetCardDetails from '../../Hooks/GetCardDetails';
+// import useGetChecklists from '../../Hooks/GetCheckLists';
+import useGetChecklists from '../../reducers/GetCheckLists';
+
+import deleteCard from '../../Functions/deleteCard';
 
 const color = red[500];
 
@@ -42,14 +42,9 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
   const { cardDetails, setCardDetails, loading, error } =
     useGetCardDetails(cardId);
 
-  const {
-    cardCheckLists,
-    setCardCheckLists,
-    loading: aloading,
-    error: aerror,
-  } = useGetChecklists(cardId);
+  const { state: cardCheckLists, dispatch: cardCheckListsDispatch } =
+    useGetChecklists(cardId);
 
-  let a = cardCheckLists;
   if (loading) {
     return (
       <>
@@ -84,96 +79,126 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
       </>
     );
   }
-
-  return (
-    <>
-      <Box sx={{ ...style, width: '70vw' }} overflow="scroll">
-        <RxCross2
-          style={{
-            float: 'right',
-            fontSize: '1.5rem',
-          }}
-          onClick={handleClose}
-        />
-        <Grid container spacing={2} height={800}>
-          <Grid item xs={12} md={9}>
-            <div>
-              <Stack direction="row" spacing={2}>
+  if (error) {
+    return (
+      <>
+        <Box sx={{ ...style, width: '70vw' }}>
+          <RxCross2
+            style={{
+              position: 'absolute',
+              right: '5px',
+              top: '5px',
+              zIndex: 1000,
+              fontSize: '1.5rem',
+            }}
+            onClick={handleClose}
+          />
+          <Grid container spacing={2} height={800} position={'relative'}>
+            <Grid item xs={12}>
+              <Stack
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <Typography variant="h4" component="h2">
-                  <FaCreditCard />
-                </Typography>
-                <Typography variant="h4" component="h2">
-                  {cardDetails.name}
+                  An error occured, please try again later.
                 </Typography>
               </Stack>
-              <Typography variant="subtitle1" marginLeft={5} component="p">
-                in list {cardDetails.idList}
-              </Typography>
-              {a ? (
-                a.map((checklist) => {
-                  return (
-                    <CheckList
-                      checklistId={checklist.id}
-                      setCardCheckLists={setCardCheckLists}
-                    />
-                  );
-                })
-              ) : (
-                <></>
-              )}
-            </div>
+            </Grid>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={3}
+        </Box>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Box sx={{ ...style, width: '70vw' }} overflow="scroll">
+          <RxCross2
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              // alignContent: 'end',
+              float: 'right',
+              fontSize: '1.5rem',
             }}
-          >
-            <Typography variant="body2" color={grey}>
-              Add to card
-            </Typography>
-            <Box marginBottom={3}>
-              <AddCheckList
-                cardId={cardId}
-                setCardCheckLists={setCardCheckLists}
-              />
-            </Box>
-            <Divider />
-            <Typography variant="body2" color={grey}>
-              Actions
-            </Typography>
-            <Box>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => {
-                  //console.log('delete');
-                  deleteCard(cardId, setCards);
-                  handleClose();
-                }}
-                sx={{ bgcolor: color }}
-              >
-                <AiOutlineDelete
-                  style={{
-                    alignSelf: 'flex-end',
-                    fontSize: '1.5rem',
-                  }}
+            onClick={handleClose}
+          />
+          <Grid container spacing={2} height={800}>
+            <Grid item xs={12} md={9}>
+              <div>
+                <Stack direction="row" spacing={2}>
+                  <Typography variant="h4" component="h2">
+                    <FaCreditCard />
+                  </Typography>
+                  <Typography variant="h4" component="h2">
+                    {cardDetails.name}
+                  </Typography>
+                </Stack>
+                {cardCheckLists.data ? (
+                  cardCheckLists.data.map((checklist) => {
+                    return (
+                      <CheckList
+                        key={checklist.id}
+                        checkListId={checklist.id}
+                        checkListName={checklist.name}
+                        cardId={cardId}
+                        cardCheckListsDispatch={cardCheckListsDispatch}
+                      />
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
+              </div>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={3}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Typography variant="body2" color={grey}>
+                Add to card
+              </Typography>
+              <Box marginBottom={3}>
+                <AddCheckList
+                  cardId={cardId}
+                  cardCheckListsDispatch={cardCheckListsDispatch}
                 />
-                <Typography variant="body2" color={grey} marginLeft={1}>
-                  Delete
-                </Typography>
-              </Button>
-            </Box>
-            {cardDetails.description}
+              </Box>
+              <Divider />
+              <Typography variant="body2" color={grey}>
+                Actions
+              </Typography>
+              <Box>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => {
+                    deleteCard(cardId, setCards);
+                    handleClose();
+                  }}
+                  sx={{ bgcolor: color }}
+                >
+                  <AiOutlineDelete
+                    style={{
+                      alignSelf: 'flex-end',
+                      fontSize: '1.5rem',
+                    }}
+                  />
+                  <Typography variant="body2" color={grey} marginLeft={1}>
+                    Delete
+                  </Typography>
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
-    </>
-  );
+        </Box>
+      </>
+    );
+  }
 };
 
 export default CardDetails;

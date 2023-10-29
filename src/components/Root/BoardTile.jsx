@@ -1,11 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { Grid } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
+import { Grid, Typography, styled, Paper, Box, Skeleton } from '@mui/material';
 
 import useGetBoardTile from '../../Hooks/GetBoardTile';
 
@@ -17,9 +12,22 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const style = {
+  width: 'auto',
+  height: 300,
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  backgroundColor: 'primary.dark',
+  backgroundPosition: 'center',
+  borderRadius: '10px',
+  '&:hover': {
+    opacity: [0.9, 0.8, 0.7],
+  },
+};
+
 const BoardTile = ({ id }) => {
   const { boardTile, loading, error } = useGetBoardTile(id);
-  //console.log('from boardTile', boardTile);
+  // console.log('from boardTile', boardTile);
   const navigate = useNavigate();
   if (loading) {
     return (
@@ -43,25 +51,7 @@ const BoardTile = ({ id }) => {
     return (
       <>
         <Grid item xs={12} sm={6} md={4} lg={3}>
-          <Box
-            sx={{
-              width: 'auto',
-              height: 300,
-              // backgroundImage: {
-              //   boardTile["prefs"] ? (`url(${boardTile.prefs.backgroundImageScaled['0'].url})`) :  `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`
-              // },
-              // backgroundImage: `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`,
-              backgroundColor: boardTile.prefs.backgroundColor,
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              // backgroundColor: 'primary.dark',
-              '&:hover': {
-                backgroundColor: 'primary.main',
-                opacity: [0.9, 0.8, 0.7],
-              },
-            }}
-          >
+          <Box sx={style}>
             <Item>
               <div>Board Not Found</div>
             </Item>
@@ -82,34 +72,26 @@ const BoardTile = ({ id }) => {
           marginTop={2}
         >
           <Box
-            sx={{
-              width: 'auto',
-              height: 300,
-              // backgroundImage: boardTile.prefs.backgroundImage
-              //   ? `url(${boardTile.prefs.backgroundImage})`
-              //   : `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`,
-              // // backgroundImage: `url(https://trello-backgrounds.s3.amazonaws.com/SharedBackground/67x100/2f18f8671481046a2aa1955e7388891a/photo-1695056721201-078a656ef90b.jpg)`,
-              // backgroundColor: boardTile.prefs.backgroundColor
-              //   ? boardTile.prefs.backgroundColor
-              //   : 'primary.dark',
-              backgroundColor: 'primary.dark',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'center',
-              '&:hover': {
-                backgroundColor: 'primary.main',
-                opacity: [0.9, 0.8, 0.7],
-              },
-            }}
+            sx={
+              !boardTile.prefs
+                ? { ...style }
+                : !boardTile.prefs.backgroundImage
+                ? !boardTile.prefs.backgroundColor
+                  ? { ...style, backgroundColor: 'primary.dark' }
+                  : {
+                      ...style,
+                      backgroundColor: boardTile.prefs.backgroundColor,
+                    }
+                : {
+                    ...style,
+                    backgroundImage: `url(${boardTile.prefs.backgroundImage})`,
+                  }
+            }
           >
             <Item>
-              <div
-              //   style={{
-              //     backgroundImage: `url(${boardTile.prefs.backgroundImageScaled['0'].url})`,
-              //   }}
-              >
+              <Typography variant="h6" component="h2">
                 {boardTile.name}
-              </div>
+              </Typography>
             </Item>
           </Box>
         </Grid>

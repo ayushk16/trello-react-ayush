@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
-import Slide from '@mui/material/Slide';
-import { Typography } from '@mui/material';
+
+import {
+  Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Slide,
+} from '@mui/material';
+
 import { TbChecklist } from 'react-icons/tb';
+
+import { ACTION } from '../../reducers/GetCheckLists';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AddCheckList({ cardId, setCardCheckLists }) {
+export default function AddCheckList({ cardId, cardCheckListsDispatch }) {
   const [open, setOpen] = React.useState(false);
   const [checkListName, setCheckListName] = useState('');
 
@@ -38,12 +44,15 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
         },
       })
         .then((res) => {
-          // //console.log('from add checkitem', res.data);
-          setCardCheckLists((prev) => [...prev, res.data]);
+          cardCheckListsDispatch({
+            type: ACTION.ADDCHECKLISTS.SUCCESS,
+            payload: res.data,
+          });
           handleClose();
         })
         .catch((err) => {
-          // //console.log(err);
+          console.log(err);
+          cardCheckListsDispatch({ type: ACTION.ADDCHECKLISTS.ERROR });
         });
     }
 
@@ -78,7 +87,6 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
         <DialogActions>
           <Button
             onClick={() => {
-              // //console.log('cancel');
               handleClose();
             }}
           >
@@ -86,7 +94,6 @@ export default function AddCheckList({ cardId, setCardCheckLists }) {
           </Button>
           <Button
             onClick={() => {
-              // //console.log('cancel');
               addValue();
             }}
           >

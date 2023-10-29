@@ -1,33 +1,22 @@
 import React from 'react';
-import { Modal, Paper, Stack, Box, Typography } from '@mui/material';
+import { Modal, Paper, Stack, Box, Typography, Skeleton } from '@mui/material';
 import { AiOutlineEdit } from 'react-icons/ai';
-
-import useGetCards from '../../Hooks/GetCards';
 
 import CardDetails from '../Cards/CardDetails';
 import AddItem from '../common/AddItem';
 
+import useGetCards from '../../Hooks/GetCards';
+
 import addCard from '../../Functions/addCard';
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  // width: 1200,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
 
 const ListCards = ({ listId }) => {
   const [open, setOpen] = React.useState(false);
   const [modalCardId, setModalCardId] = React.useState(null);
+
   const handleOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setModalCardId(null);
     setOpen(false);
@@ -37,7 +26,9 @@ const ListCards = ({ listId }) => {
   if (loading) {
     return (
       <>
-        <div>Loading...</div>
+        <div>
+          <Skeleton animation="wave"></Skeleton>
+        </div>
       </>
     );
   } else if (error) {
@@ -51,7 +42,7 @@ const ListCards = ({ listId }) => {
       <>
         {cards.map((card) => {
           return (
-            <Paper elevation={4}>
+            <Paper elevation={4} key={card.id} className="list-card">
               <Box
                 height={40}
                 alignContent="center"
@@ -67,11 +58,7 @@ const ListCards = ({ listId }) => {
                 >
                   <Typography variant="body1">{card.name}</Typography>
                   <Typography variant="body1">
-                    <AiOutlineEdit
-                      onClick={() => {
-                        deleteCard(card.id);
-                      }}
-                    />
+                    <AiOutlineEdit />
                   </Typography>
                 </Stack>
               </Box>
@@ -85,8 +72,6 @@ const ListCards = ({ listId }) => {
         />
         <Modal
           open={open}
-          // xs={{ width: '100vw' }}
-          // md={{ width: '80vw' }}
           onClose={handleClose}
           aria-labelledby="parent-modal-title"
           aria-describedby="parent-modal-description"
@@ -101,10 +86,6 @@ const ListCards = ({ listId }) => {
       </>
     );
   }
-};
-
-const deleteCard = (cardId) => {
-  // //console.log(cardId);
 };
 
 export default ListCards;

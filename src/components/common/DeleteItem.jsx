@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import { Typography } from '@mui/material';
+import React from 'react';
+
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Slide,
+  Typography,
+} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -32,13 +36,7 @@ const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
         onClick={handleClickOpen}
       >
         <DeleteIcon style={{ alignSelf: 'flex-end', fontSize: '1.5rem' }} />
-        <Typography
-          variant="body2"
-          marginLeft={1}
-          onClick={() => {
-            //console.log('delete Element');
-          }}
-        >
+        <Typography variant="body2" marginLeft={1}>
           DELETE
         </Typography>
       </Button>
@@ -58,7 +56,6 @@ const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
         <DialogActions>
           <Button
             onClick={() => {
-              //console.log('cancel');
               handleClose();
             }}
           >
@@ -66,7 +63,6 @@ const DeleteItem = ({ deleteFunction, deleteFunctionParams, itemName }) => {
           </Button>
           <Button
             onClick={() => {
-              //console.log('delete initiated');
               deleteFunction(deleteFunctionParams);
               handleClose();
             }}

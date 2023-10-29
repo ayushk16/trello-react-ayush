@@ -1,6 +1,27 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Container, Box, Stack } from '@mui/material';
+import {
+  styled,
+  Container,
+  Box,
+  Typography,
+  Grid,
+  Stack,
+  Skeleton,
+  Button,
+  Card,
+  CardContent,
+  Paper,
+} from '@mui/material';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 import useGetList from '../../Hooks/GetLists';
 
@@ -9,25 +30,24 @@ import AddItem from '../common/AddItem';
 
 import addList from '../../Functions/addList';
 
+import useGetBoardTile from '../../Hooks/GetBoardTile';
+
+const style = {
+  marginTop: '-50px',
+  backgroundSize: 'cover',
+  backgroundRepeat: 'no-repeat',
+  padding: '50px 100px',
+  backgroundColor: 'transparent',
+  width: '100vw',
+  minHeight: '100vh',
+};
+
 const BoardView = ({ id }) => {
+  const { boardTile } = useGetBoardTile(id);
   const { board, setBoard, loading, error } = useGetList(id);
-  // //console.log('from boards view', board);
+  const navigate = useNavigate();
 
   if (loading) {
-    return (
-      <>
-        <div>Loading...</div>
-      </>
-    );
-  }
-
-  if (error) {
-    return (
-      <>
-        <div>error...</div>
-      </>
-    );
-  } else {
     return (
       <>
         <Container>
@@ -45,16 +65,113 @@ const BoardView = ({ id }) => {
               overflow="scroll"
               height={'80vh'}
             >
+              <Box width="auto" minWidth={300} maxWidth={500} minHeight={400}>
+                <Card
+                  sx={{
+                    height: '400px',
+                    backgroundColor: '#f5f5f5',
+                  }}
+                >
+                  <CardContent>
+                    <Skeleton height={50}></Skeleton>
+                    <Skeleton height={300}></Skeleton>
+                  </CardContent>
+                </Card>
+              </Box>
+              <Box width="auto" minWidth={300} maxWidth={500} minHeight={400}>
+                <Card
+                  sx={{
+                    height: '400px',
+                    backgroundColor: '#f5f5f5',
+                  }}
+                >
+                  <CardContent>
+                    <Skeleton height={50}></Skeleton>
+                    <Skeleton height={300}></Skeleton>
+                  </CardContent>
+                </Card>
+              </Box>
+            </Stack>
+          </Stack>
+        </Container>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Container>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            marginTop={3}
+          >
+            <Grid item xs={12}>
+              <Item>
+                <Typography variant="h3" component="h1">
+                  An error occured, please try again later.
+                </Typography>
+                <Box height={50}></Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    navigate('/boards');
+                  }}
+                >
+                  Go to Home Page!
+                </Button>
+              </Item>
+            </Grid>
+          </Grid>
+        </Container>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div
+          style={
+            !boardTile.prefs
+              ? { ...style }
+              : !boardTile.prefs.backgroundImage
+              ? !boardTile.prefs.backgroundColor
+                ? { ...style, backgroundColor: 'transparent' }
+                : {
+                    ...style,
+                    backgroundColor: boardTile.prefs.backgroundColor,
+                  }
+              : {
+                  ...style,
+                  backgroundImage: `url(${boardTile.prefs.backgroundImage})`,
+                }
+          }
+        >
+          <Stack
+            spacing={2}
+            display="flex"
+            direction="row"
+            flexWrap="wrap"
+            marginY={4}
+          >
+            <Stack
+              marginTop={3}
+              gap={5}
+              direction={'row'}
+              overflow="scroll"
+              height={'80vh'}
+            >
               {board.map((list) => {
                 return (
-                  <>
-                    <List
-                      listId={list.id}
-                      listName={list.name}
-                      setBoard={setBoard}
-                      board={board}
-                    />
-                  </>
+                  <List
+                    key={list.id}
+                    listId={list.id}
+                    listName={list.name}
+                    setBoard={setBoard}
+                    board={board}
+                  />
                 );
               })}
 
@@ -67,7 +184,7 @@ const BoardView = ({ id }) => {
               </Box>
             </Stack>
           </Stack>
-        </Container>
+        </div>
       </>
     );
   }

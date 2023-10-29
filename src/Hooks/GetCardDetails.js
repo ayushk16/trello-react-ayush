@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -17,10 +17,11 @@ const useGetCardDetails = (cardId) => {
                 token: import.meta.env.VITE_TOKEN
             }
         }).then(res => {
+            console.log(res.data);
             setCardDetails(res.data);
             setLoading(false);
         }).catch(err => {
-            //console.log(err);
+            console.log('error in GetCardDetails in hooks', err);
             setLoading(false);
             setError(err);
         })

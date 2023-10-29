@@ -1,23 +1,21 @@
 import axios from "axios";
+import { ACTION } from "../reducers/GetCheckLists";
 
-const deleteCard = ({ checklistId, setCardCheckLists }) => {
-    //console.log(checklistId);
+const deleteCard = ({ checkListId, cardCheckListsDispatch }) => {
     axios({
         method: 'DELETE',
-        url: `https://api.trello.com/1/checklists/${checklistId}`,
+        url: `https://api.trello.com/1/checklists/${checkListId}`,
         params: {
             key: import.meta.env.VITE_API_KEY,
             token: import.meta.env.VITE_TOKEN,
         },
     })
         .then((res) => {
-            //console.log("from delete checklist", res.data);
-            setCardCheckLists((prev) => {
-                return prev.filter((checkList) => { return checkList.id !== checklistId })
-            })
+            cardCheckListsDispatch({ type: ACTION.DELETECHECKLISTS.SUCCESS, payload: checkListId })
         })
         .catch((err) => {
-            console.log(err);
+            console.log('error in deleteCard in functions', err);
+            cardCheckListsDispatch({ type: ACTION.DELETECHECKLISTS.ERROR })
         });
 }
 

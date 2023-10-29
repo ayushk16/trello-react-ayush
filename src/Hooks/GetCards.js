@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -18,11 +18,10 @@ const useGetCards = (listId) => {
         })
             .then((res) => {
                 setCards(res.data);
-                //console.log(res.data);
                 setLoading(false);
             })
             .catch(err => {
-                // //console.log(err);
+                console.log('error in GetCards in hook', err);
                 setLoading(false)
                 setError(err);
             })

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
-
-
 
 const useGetBoardTile = (boardId) => {
     const [boardTile, setBoardTile] = useState([]);
     const [loading, setLoading] = useState(null);
     const [error, setError] = useState(null);
+
     useEffect(() => {
         setLoading(true)
         axios({
@@ -17,14 +16,13 @@ const useGetBoardTile = (boardId) => {
                 token: import.meta.env.VITE_TOKEN
             }
         })
-            // .then(res => //console.log(res.data))
             .then((res) => {
 
                 setBoardTile(res.data);
                 setLoading(false);
             })
             .catch(err => {
-                //console.log(err);
+                console.log('error in GetBoardTiles in hooks', err);
                 setLoading(false);
                 setError(err);
             })
