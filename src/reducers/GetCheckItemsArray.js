@@ -73,9 +73,13 @@ const reducer = (state, action) => {
                 loading: false,
                 data: state.data.map((checkItem) => {
                     if (checkItem.id === action.payload.id) {
+                        console.log('updated', action.payload)
                         return action.payload;
                     }
-                    return checkItem;
+                    else {
+
+                        return checkItem;
+                    }
                 })
             }
         case ACTION.EDITCHECKITEMS.ERROR:

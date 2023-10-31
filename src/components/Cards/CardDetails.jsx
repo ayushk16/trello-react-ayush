@@ -41,11 +41,13 @@ const style = {
 const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
   const { cardDetails, setCardDetails, loading, error } =
     useGetCardDetails(cardId);
+  console.log(cardDetails);
 
   const { state: cardCheckLists, dispatch: cardCheckListsDispatch } =
     useGetChecklists(cardId);
+  console.log(cardCheckLists.data);
 
-  if (loading) {
+  if (loading && cardCheckLists.loading) {
     return (
       <>
         <Box sx={{ ...style, width: '70vw' }}>
@@ -104,6 +106,39 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
               >
                 <Typography variant="h4" component="h2">
                   An error occured, please try again later.
+                </Typography>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Box>
+      </>
+    );
+  }
+  if (cardCheckLists.data.length == 0 && cardCheckLists.error) {
+    return (
+      <>
+        <Box sx={{ ...style, width: '70vw' }}>
+          <RxCross2
+            style={{
+              position: 'absolute',
+              right: '5px',
+              top: '5px',
+              zIndex: 1000,
+              fontSize: '1.5rem',
+            }}
+            onClick={handleClose}
+          />
+          <Grid container spacing={2} height={800} position={'relative'}>
+            <Grid item xs={12}>
+              <Stack
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography variant="h4" component="h2">
+                  An error occured, loading checklists
                 </Typography>
               </Stack>
             </Grid>

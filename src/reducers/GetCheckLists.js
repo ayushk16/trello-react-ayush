@@ -78,6 +78,7 @@ const useGetChecklists = (cardId) => {
                 token: import.meta.env.VITE_TOKEN
             }
         }).then(res => {
+            console.log('checklists', res.data);
             dispatch({ type: ACTION.FETCHCHECKLISTS.SUCCESS, payload: res.data })
         }).catch(err => {
             console.log('error in getCheckLists in reducers', err);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 
@@ -7,7 +7,7 @@ const useGetCardDetails = (cardId) => {
     const [loading, setLoading] = useState(null);
     const [error, setError] = useState(null);
 
-    const getDetails = useCallback(() => {
+    useEffect(() => {
         setLoading(true);
         axios({
             method: "GET",
@@ -17,7 +17,6 @@ const useGetCardDetails = (cardId) => {
                 token: import.meta.env.VITE_TOKEN
             }
         }).then(res => {
-            console.log(res.data);
             setCardDetails(res.data);
             setLoading(false);
         }).catch(err => {
@@ -25,11 +24,7 @@ const useGetCardDetails = (cardId) => {
             setLoading(false);
             setError(err);
         })
-    }, [cardId])
-
-    useEffect(() => {
-        getDetails();
-    }, [cardId])
+    }, [])
     return ({ cardDetails, setCardDetails, loading, error })
 
 }

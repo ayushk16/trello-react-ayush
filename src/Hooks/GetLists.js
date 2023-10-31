@@ -25,7 +25,7 @@ const useGetList = (boardId) => {
                 setLoading(false);
                 setError(err);
             })
-    }, [useGetList])
+    }, [])
     return ({ board, setBoard, loading, error })
 
 }

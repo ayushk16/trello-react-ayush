@@ -1,8 +1,7 @@
 import axios from "axios";
 import { ACTION } from '../reducers/GetCheckItemsArray';
-import { ACTION as CHECKACTION } from '../reducers/GetCheckedUnchecked';
 
-const addCheckItem = async ({ checkItemsArrayDispatch, setTotalNumberOfItems, checkStatusDispatch, checkListId, value }) => {
+const addCheckItem = async ({ checkItemsArrayDispatch, checkListId, value }) => {
     axios({
         method: 'POST',
         url: `https://api.trello.com/1/checklists/${checkListId}/checkItems`,
@@ -14,7 +13,6 @@ const addCheckItem = async ({ checkItemsArrayDispatch, setTotalNumberOfItems, ch
     })
         .then((res) => {
             checkItemsArrayDispatch({ type: ACTION.ADDCHECKITEMS.SUCCESS, payload: res.data });
-            checkStatusDispatch({ type: CHECKACTION.ADDCHECKITEM });
         })
         .catch((err) => {
             console.log('error in addCheckItem in functions', err);

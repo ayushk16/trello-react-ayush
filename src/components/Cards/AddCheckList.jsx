@@ -74,11 +74,11 @@ export default function AddCheckList({ cardId, cardCheckListsDispatch }) {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{'ADD LIST'}</DialogTitle>
+        <DialogTitle>{'ADD CHECKLIST'}</DialogTitle>
         <DialogContent>
           <TextField
             id="outlined-basic"
-            label="Outlined"
+            label="Checklist Name"
             variant="outlined"
             value={checkListName}
             onChange={(e) => setCheckListName(e.target.value)}

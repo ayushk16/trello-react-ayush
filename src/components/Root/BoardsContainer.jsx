@@ -56,7 +56,40 @@ const BoardsContainer = () => {
     );
   }
 
-  if (boardsData.error !== '') {
+  if (boardsData.error !== '' && boardsData.error === 'Something went wrong ') {
+    return (
+      <Container>
+        <Grid
+          container
+          rowSpacing={1}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          marginTop={3}
+        >
+          <Grid item xs={12}>
+            <Item>
+              <Typography variant="h3" component="h1">
+                Can't load try again later.
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  window.location.reload();
+                }}
+              >
+                Refresh Page!
+              </Button>
+            </Item>
+          </Grid>
+        </Grid>
+      </Container>
+    );
+  }
+
+  if (
+    boardsData.error !== '' &&
+    boardsData.error === 'Something went while adding board try again.'
+  ) {
     return (
       <Container>
         <Grid
@@ -96,7 +129,7 @@ const BoardsContainer = () => {
             marginTop={3}
           >
             {boardsData.data.map((item) => {
-              return <BoardTile id={item.id} key={item.id} />;
+              return <BoardTile id={item.id} key={item.id} tile={item} />;
             })}
             <Grid
               item

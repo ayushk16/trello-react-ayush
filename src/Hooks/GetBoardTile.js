@@ -17,7 +17,6 @@ const useGetBoardTile = (boardId) => {
             }
         })
             .then((res) => {
-
                 setBoardTile(res.data);
                 setLoading(false);
             })
@@ -26,7 +25,7 @@ const useGetBoardTile = (boardId) => {
                 setLoading(false);
                 setError(err);
             })
-    }, [useGetBoardTile])
+    }, [])
     return ({ boardTile, loading, error })
 
 }

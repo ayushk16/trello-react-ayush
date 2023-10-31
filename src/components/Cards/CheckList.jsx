@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Typography,
   Stack,
@@ -25,7 +25,6 @@ import useGetCheckItemsArray from '../../reducers/GetCheckItemsArray';
 
 import deleteCheckList from '../../Functions/deleteCheckList';
 import addCheckItem from '../../Functions/addCheckItem';
-import useGetCheckedUnchecked from '../../reducers/GetCheckedUnchecked';
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -48,8 +47,21 @@ const CheckList = ({
 }) => {
   const { state: checkItemsArray, dispatch: checkItemsArrayDispatch } =
     useGetCheckItemsArray(checkListId);
-  const { state: checkItemsStatus, dispatch: checkStatusDispatch } =
-    useGetCheckedUnchecked(checkItemsArray);
+
+  let numberOfCheckedItems = 0;
+  let totalNumberOfItems = 0;
+
+  let checkedItems = 0;
+  checkItemsArray.data.forEach((item) => {
+    if (item.state === 'complete') {
+      checkedItems++;
+    }
+  });
+  numberOfCheckedItems = checkedItems;
+
+  totalNumberOfItems = checkItemsArray.data.length;
+  console.log('totalNumberOfItems', totalNumberOfItems);
+  console.log('numberOfCheckedItems', numberOfCheckedItems);
 
   if (checkItemsArray.loading) {
     return (
@@ -91,7 +103,6 @@ const CheckList = ({
                       addFunction={addCheckItem}
                       addFunctionParams={{
                         checkItemsArrayDispatch,
-                        checkStatusDispatch,
                         checkListId,
                       }}
                       itemName={'CheckItem'}
@@ -129,11 +140,7 @@ const CheckList = ({
                     </Typography>
                   </div>
                 </Stack>
-                <DeleteItem
-                  deleteFunction={deleteCheckList}
-                  deleteFunctionParams={{ checkListId, cardCheckListsDispatch }}
-                  itemName={checkListName}
-                />
+                <DeleteItem />
                 <Stack direction="column">
                   <FormGroup>
                     <Paper>
@@ -141,7 +148,7 @@ const CheckList = ({
                         {checkItemsArray.error.length > 0 ? (
                           <div>{checkItemsArray.error}</div>
                         ) : (
-                          <div>flase</div>
+                          <div>false</div>
                         )}
                         {/* error... */}
                       </Typography>
@@ -152,7 +159,6 @@ const CheckList = ({
                       addFunction={addCheckItem}
                       addFunctionParams={{
                         checkItemsArrayDispatch,
-                        checkStatusDispatch,
                         checkListId,
                       }}
                       itemName={'CheckItem'}
@@ -194,18 +200,12 @@ const CheckList = ({
                   itemName={checkListName}
                 />
                 <Stack direction="column">
-                  {/* <ProgressBar></ProgressBar> */}
-                  {checkItemsStatus &&
-                    checkItemsStatus.totalNumberOfItems > 0 && (
-                      <BorderLinearProgress
-                        variant="determinate"
-                        value={
-                          (checkItemsStatus.numberOfCheckedItems /
-                            checkItemsStatus.totalNumberOfItems) *
-                          100
-                        }
-                      />
-                    )}
+                  {numberOfCheckedItems > 0 && (
+                    <BorderLinearProgress
+                      variant="determinate"
+                      value={(numberOfCheckedItems / totalNumberOfItems) * 100}
+                    />
+                  )}
                   <FormGroup>
                     {checkItemsArray.data &&
                       checkItemsArray.data.map((item) => {
@@ -213,7 +213,8 @@ const CheckList = ({
                           <>
                             <CheckItem
                               key={item.id}
-                              checkStatusDispatch={checkStatusDispatch}
+                              itemName={item.name}
+                              itemState={item.state}
                               cardId={cardId}
                               checkItemsArrayDispatch={checkItemsArrayDispatch}
                               checkListId={checkListId}
@@ -228,7 +229,6 @@ const CheckList = ({
                       addFunction={addCheckItem}
                       addFunctionParams={{
                         checkItemsArrayDispatch,
-                        checkStatusDispatch,
                         checkListId,
                       }}
                       itemName={'CheckItem'}

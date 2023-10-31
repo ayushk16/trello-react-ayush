@@ -34,7 +34,9 @@ const ListCards = ({ listId }) => {
   } else if (error) {
     return (
       <>
-        <div>error...{listId}</div>
+        <Typography variant="body1" color={'error'}>
+          Error loading cards...
+        </Typography>
       </>
     );
   } else {

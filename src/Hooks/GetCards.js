@@ -25,7 +25,7 @@ const useGetCards = (listId) => {
                 setLoading(false)
                 setError(err);
             })
-    }, [useGetCards, listId])
+    }, [])
     return ({ cards, setCards, loading, error })
 
 }
