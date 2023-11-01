@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { fetchBoard } from '../../features/boards/boardSlice';
 
 import {
   styled,
@@ -30,7 +32,7 @@ import AddItem from '../common/AddItem';
 
 import addList from '../../Functions/addList';
 
-import useGetBoardTile from '../../Hooks/GetBoardTile';
+// import useGetboardView from '../../Hooks/GetboardView';
 
 const style = {
   marginTop: '-50px',
@@ -43,7 +45,17 @@ const style = {
 };
 
 const BoardView = ({ id }) => {
-  const { boardTile } = useGetBoardTile(id);
+  // const { boardView } = useGetboardView(id);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBoard(id));
+  }, []);
+
+  const boardView = useSelector((state) => {
+    return state.board.data;
+  });
+
   const { board, setBoard, loading, error } = useGetList(id);
   const navigate = useNavigate();
 
@@ -134,18 +146,18 @@ const BoardView = ({ id }) => {
       <>
         <div
           style={
-            !boardTile.prefs
+            !boardView.prefs
               ? { ...style }
-              : !boardTile.prefs.backgroundImage
-              ? !boardTile.prefs.backgroundColor
+              : !boardView.prefs.backgroundImage
+              ? !boardView.prefs.backgroundColor
                 ? { ...style, backgroundColor: 'transparent' }
                 : {
                     ...style,
-                    backgroundColor: boardTile.prefs.backgroundColor,
+                    backgroundColor: boardView.prefs.backgroundColor,
                   }
               : {
                   ...style,
-                  backgroundImage: `url(${boardTile.prefs.backgroundImage})`,
+                  backgroundImage: `url(${boardView.prefs.backgroundImage})`,
                 }
           }
         >

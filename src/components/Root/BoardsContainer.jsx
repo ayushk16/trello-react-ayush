@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBoards, addBoard } from '../../features/boards/boardsSlice';
 import {
   styled,
   Button,
@@ -12,10 +14,6 @@ import {
 
 import BoardTile from './BoardTile';
 import AddItem from '../common/AddItem';
-import addBoard from '../../Functions/addBoard';
-
-// import useGetHome from '../../Hooks/GetHome';
-import useGetBoards from '../../Hooks/GetBoards';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -26,7 +24,20 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const BoardsContainer = () => {
-  const { state: boardsData, dispatch: boardsDispatch } = useGetBoards();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchBoards());
+  }, []);
+
+  const boardsData = useSelector((state) => {
+    return state.boards;
+  });
+
+  const addBoardFunction = ({ value }) => {
+    console.log(value);
+    dispatch(addBoard(value));
+  };
 
   if (boardsData.loading) {
     return (
@@ -129,7 +140,7 @@ const BoardsContainer = () => {
             marginTop={3}
           >
             {boardsData.data.map((item) => {
-              return <BoardTile id={item.id} key={item.id} tile={item} />;
+              return <BoardTile key={item.id} tile={item} />;
             })}
             <Grid
               item
@@ -142,8 +153,8 @@ const BoardsContainer = () => {
               height={300}
             >
               <AddItem
-                addFunction={addBoard}
-                addFunctionParams={{ boardsDispatch }}
+                addFunction={addBoardFunction}
+                addFunctionParams={{}}
                 itemName={'Board'}
               />
             </Grid>

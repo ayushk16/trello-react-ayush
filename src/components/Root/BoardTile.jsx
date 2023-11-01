@@ -23,9 +23,7 @@ const style = {
   },
 };
 
-const BoardTile = ({ id, tile: boardTile }) => {
-  const loading = false;
-  const error = false;
+const BoardTile = ({ tile: boardTile }) => {
   const navigate = useNavigate();
 
   return (
