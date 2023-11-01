@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 import { fetchBoard } from '../../features/boards/boardSlice';
+import { fetchLists } from '../../features/lists/listsSlice';
 
 import {
   styled,
@@ -56,7 +58,23 @@ const BoardView = ({ id }) => {
     return state.board.data;
   });
 
-  const { board, setBoard, loading, error } = useGetList(id);
+  // const { board, setBoard, loading, error } = useGetList(id);
+
+  const setBoard = 'as';
+  useEffect(() => {
+    dispatch(fetchLists(id));
+  }, []);
+
+  const board = useSelector((state) => {
+    return state.lists.data;
+  });
+  const loading = useSelector((state) => {
+    return state.lists.loading;
+  });
+  const error = useSelector((state) => {
+    return state.lists.error;
+  });
+
   const navigate = useNavigate();
 
   if (loading) {
