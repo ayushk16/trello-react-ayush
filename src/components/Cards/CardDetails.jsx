@@ -18,8 +18,7 @@ import CheckList from './CheckList';
 import AddCheckList from './AddCheckList';
 
 import useGetCardDetails from '../../Hooks/GetCardDetails';
-// import useGetChecklists from '../../Hooks/GetCheckLists';
-import useGetChecklists from '../../reducers/GetCheckLists';
+import useGetChecklists from '../../Hooks/GetCheckLists';
 
 import deleteCard from '../../Functions/deleteCard';
 

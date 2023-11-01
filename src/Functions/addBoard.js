@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { ACTION } from "../reducers/GetBoards";
+import { ACTION } from "../Hooks/GetBoards";
 const addBoard = async ({ boardsDispatch, value }) => {
     axios({
         method: 'POST',

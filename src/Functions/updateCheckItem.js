@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { ACTION } from '../reducers/GetCheckItemsArray';
+import { ACTION } from '../Hooks/GetCheckItemsArray';
 
 const updateCheckItem = async ({ checkItemsArrayDispatch, checkedStatus, cardId, checkItemId }) => {
     axios({

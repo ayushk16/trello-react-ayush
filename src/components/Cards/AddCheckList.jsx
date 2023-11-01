@@ -14,7 +14,7 @@ import {
 
 import { TbChecklist } from 'react-icons/tb';
 
-import { ACTION } from '../../reducers/GetCheckLists';
+import { ACTION } from '../../Hooks/GetCheckLists';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

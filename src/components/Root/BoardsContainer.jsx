@@ -15,7 +15,7 @@ import AddItem from '../common/AddItem';
 import addBoard from '../../Functions/addBoard';
 
 // import useGetHome from '../../Hooks/GetHome';
-import useGetBoards from '../../reducers/GetBoards';
+import useGetBoards from '../../Hooks/GetBoards';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',

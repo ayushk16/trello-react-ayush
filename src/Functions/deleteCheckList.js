@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ACTION } from "../reducers/GetCheckLists";
+import { ACTION } from "../Hooks/GetCheckLists";
 
 const deleteCard = ({ checkListId, cardCheckListsDispatch }) => {
     axios({

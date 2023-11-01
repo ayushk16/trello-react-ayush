@@ -19,9 +19,7 @@ import CheckItem from './CheckItem';
 import DeleteItem from '../common/DeleteItem';
 import AddItem from '../common/AddItem';
 
-// import useGetChecklist from '../../Hooks/GetCheckList';
-// import useGetCheckItemsArray from '../../Hooks/GetCheckItemsArray';
-import useGetCheckItemsArray from '../../reducers/GetCheckItemsArray';
+import useGetCheckItemsArray from '../../Hooks/GetCheckItemsArray';
 
 import deleteCheckList from '../../Functions/deleteCheckList';
 import addCheckItem from '../../Functions/addCheckItem';
