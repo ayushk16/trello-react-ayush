@@ -5,6 +5,13 @@ const initialState = {
     loading: true,
     error: '',
     data: [],
+    // data: {
+    //     checklist_id1: {
+    //         items: {
+
+    //         }
+    //     }
+    // },
 };
 
 export const fetchCheckLists = createAsyncThunk('checkLists/fetchCheckLists', ({ cardId }) => {
