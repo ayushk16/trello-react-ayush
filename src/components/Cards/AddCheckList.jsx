@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import {
@@ -14,13 +15,14 @@ import {
 
 import { TbChecklist } from 'react-icons/tb';
 
-import { ACTION } from '../../Hooks/GetCheckLists';
+import { addCheckList } from '../../features/checkLists/checkListsSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AddCheckList({ cardId, cardCheckListsDispatch }) {
+export default function AddCheckList({ cardId }) {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [checkListName, setCheckListName] = useState('');
 
@@ -34,29 +36,10 @@ export default function AddCheckList({ cardId, cardCheckListsDispatch }) {
 
   const addValue = () => {
     if (checkListName) {
-      axios({
-        method: 'POST',
-        url: `https://api.trello.com/1/cards/${cardId}/checklists`,
-        params: {
-          name: checkListName,
-          key: import.meta.env.VITE_API_KEY,
-          token: import.meta.env.VITE_TOKEN,
-        },
-      })
-        .then((res) => {
-          cardCheckListsDispatch({
-            type: ACTION.ADDCHECKLISTS.SUCCESS,
-            payload: res.data,
-          });
-          handleClose();
-        })
-        .catch((err) => {
-          console.log(err);
-          cardCheckListsDispatch({ type: ACTION.ADDCHECKLISTS.ERROR });
-        });
+      dispatch(addCheckList({ cardId, checkListName }));
     }
-
     setCheckListName('');
+    handleClose();
   };
 
   return (

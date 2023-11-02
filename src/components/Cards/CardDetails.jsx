@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   Box,
@@ -17,10 +18,9 @@ import { grey, red } from '@mui/material/colors';
 import CheckList from './CheckList';
 import AddCheckList from './AddCheckList';
 
-import useGetCardDetails from '../../Hooks/GetCardDetails';
-import useGetChecklists from '../../Hooks/GetCheckLists';
-
-import deleteCard from '../../Functions/deleteCard';
+import { fetchCardDetail } from '../../features/cards/cardDetailSlice';
+import { fetchCheckLists } from '../../features/checkLists/checkListsSlice';
+import { deleteCard } from '../../features/lists/listCardsSlice';
 
 const color = red[500];
 
@@ -37,16 +37,27 @@ const style = {
   pb: 3,
 };
 
-const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
-  const { cardDetails, setCardDetails, loading, error } =
-    useGetCardDetails(cardId);
-  console.log(cardDetails);
+const CardDetails = ({ listId, cardId, handleClose, handleOpen, setCards }) => {
+  const dispatch = useDispatch();
 
-  const { state: cardCheckLists, dispatch: cardCheckListsDispatch } =
-    useGetChecklists(cardId);
-  console.log(cardCheckLists.data);
+  useEffect(() => {
+    dispatch(fetchCardDetail({ cardId }));
+    dispatch(fetchCheckLists({ cardId }));
+  }, []);
 
-  if (loading && cardCheckLists.loading) {
+  const cardDetails = useSelector((state) => {
+    return state.cardDetail;
+  });
+
+  const cardCheckLists = useSelector((state) => {
+    return state.checkLists;
+  });
+
+  const deleteACard = ({ listId, cardId }) => {
+    dispatch(deleteCard({ listId, cardId }));
+  };
+
+  if (cardDetails.loading && cardCheckLists.loading) {
     return (
       <>
         <Box sx={{ ...style, width: '70vw' }}>
@@ -80,7 +91,7 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
       </>
     );
   }
-  if (error) {
+  if (cardDetails.error) {
     return (
       <>
         <Box sx={{ ...style, width: '70vw' }}>
@@ -164,7 +175,7 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
                     <FaCreditCard />
                   </Typography>
                   <Typography variant="h4" component="h2">
-                    {cardDetails.name}
+                    {cardDetails.data.name}
                   </Typography>
                 </Stack>
                 {cardCheckLists.data ? (
@@ -175,7 +186,7 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
                         checkListId={checklist.id}
                         checkListName={checklist.name}
                         cardId={cardId}
-                        cardCheckListsDispatch={cardCheckListsDispatch}
+                        checkItemsArray={checklist.checkItems}
                       />
                     );
                   })
@@ -197,10 +208,7 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
                 Add to card
               </Typography>
               <Box marginBottom={3}>
-                <AddCheckList
-                  cardId={cardId}
-                  cardCheckListsDispatch={cardCheckListsDispatch}
-                />
+                <AddCheckList cardId={cardId} />
               </Box>
               <Divider />
               <Typography variant="body2" color={grey}>
@@ -211,7 +219,7 @@ const CardDetails = ({ cardId, handleClose, handleOpen, setCards }) => {
                   variant="contained"
                   color="error"
                   onClick={() => {
-                    deleteCard(cardId, setCards);
+                    deleteACard({ listId, cardId });
                     handleClose();
                   }}
                   sx={{ bgcolor: color }}

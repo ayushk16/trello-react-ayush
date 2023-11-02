@@ -35,7 +35,6 @@ const BoardsContainer = () => {
   });
 
   const addBoardFunction = ({ value }) => {
-    console.log(value);
     dispatch(addBoard(value));
   };
 

@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Paper, Stack, Box, Typography, Skeleton } from '@mui/material';
 import { AiOutlineEdit } from 'react-icons/ai';
 
 import CardDetails from '../Cards/CardDetails';
 import AddItem from '../common/AddItem';
 
-import useGetCards from '../../Hooks/GetCards';
-
-import addCard from '../../Functions/addCard';
+import { fetchCards, addCard } from '../../features/lists/listCardsSlice';
 
 const ListCards = ({ listId }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [modalCardId, setModalCardId] = React.useState(null);
+
+  const addNewCard = ({ listId, value }) => {
+    dispatch(addCard({ listId, value }));
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -22,27 +26,15 @@ const ListCards = ({ listId }) => {
     setOpen(false);
   };
 
-  const { cards, setCards, loading, error } = useGetCards(listId);
-  if (loading) {
-    return (
-      <>
-        <div>
-          <Skeleton animation="wave"></Skeleton>
-        </div>
-      </>
-    );
-  } else if (error) {
-    return (
-      <>
-        <Typography variant="body1" color={'error'}>
-          Error loading cards...
-        </Typography>
-      </>
-    );
-  } else {
-    return (
-      <>
-        {cards.map((card) => {
+  const listCards = useSelector((state) => {
+    if (state && state.listCards.data && state.listCards.data[listId]) {
+      return state.listCards.data[listId];
+    }
+  });
+  return (
+    <>
+      {listCards &&
+        listCards.map((card) => {
           return (
             <Paper elevation={4} key={card.id} className="list-card">
               <Box
@@ -67,27 +59,26 @@ const ListCards = ({ listId }) => {
             </Paper>
           );
         })}
-        <AddItem
-          addFunction={addCard}
-          addFunctionParams={{ setCards, listId }}
-          itemName={'Card'}
+      <AddItem
+        addFunction={addNewCard}
+        addFunctionParams={{ listId }}
+        itemName={'Card'}
+      />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <CardDetails
+          listId={listId}
+          cardId={modalCardId}
+          handleClose={handleClose}
+          handleOpen={handleOpen}
         />
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="parent-modal-title"
-          aria-describedby="parent-modal-description"
-        >
-          <CardDetails
-            cardId={modalCardId}
-            handleClose={handleClose}
-            handleOpen={handleOpen}
-            setCards={setCards}
-          />
-        </Modal>
-      </>
-    );
-  }
+      </Modal>
+    </>
+  );
 };
 
 export default ListCards;

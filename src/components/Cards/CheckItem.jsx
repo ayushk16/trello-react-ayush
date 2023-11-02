@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import {
   Typography,
@@ -7,12 +8,12 @@ import {
   Skeleton,
 } from '@mui/material';
 
-import updateCheckItem from '../../Functions/updateCheckItem';
-
 import DeleteItem from '../common/DeleteItem';
 
-// import useGetCheckItem from '../../Hooks/GetCheckItem';
-import deleteCheckItem from '../../Functions/deleteCheckItem';
+import {
+  updateCheckItem,
+  deleteCheckItem,
+} from '../../features/checkLists/checkListsSlice';
 
 const CheckItem = ({
   itemName,
@@ -22,8 +23,7 @@ const CheckItem = ({
   checkListId,
   checkItemId,
 }) => {
-  // const { state: checkItemData, dispatch: checkItemDataDispatch } =
-  //   useGetCheckItem(checkListId, checkItemId);
+  const dispatch = useDispatch();
 
   const [checkedStatus, setCheckedStatus] = useState(true);
 
@@ -31,22 +31,35 @@ const CheckItem = ({
     itemState && setCheckedStatus(itemState === 'complete' ? true : false);
   }, []);
 
+  const updateACheckItem = ({
+    cardId,
+    checkListId,
+    checkItemId,
+    checkedStatus,
+  }) => {
+    dispatch(
+      updateCheckItem({ cardId, checkListId, checkItemId, checkedStatus })
+    );
+  };
+
+  const deleteACheckItem = ({ checkListId, checkItemId }) => {
+    dispatch(deleteCheckItem({ checkListId, checkItemId }));
+  };
+
   const handleCheck = (isCheck) => {
     if (isCheck) {
-      console.log('checked');
-      updateCheckItem({
-        checkItemsArrayDispatch,
-        checkedStatus: isCheck,
+      updateACheckItem({
         cardId,
+        checkListId,
         checkItemId,
+        checkedStatus: isCheck,
       });
     } else {
-      console.log('unchecked');
-      updateCheckItem({
-        checkItemsArrayDispatch,
-        checkedStatus: isCheck,
+      updateACheckItem({
         cardId,
+        checkListId,
         checkItemId,
+        checkedStatus: isCheck,
       });
     }
   };
@@ -80,11 +93,10 @@ const CheckItem = ({
             {itemName}
           </Typography>
           <DeleteItem
-            deleteFunction={deleteCheckItem}
+            deleteFunction={deleteACheckItem}
             deleteFunctionParams={{
-              checkItemId,
               checkListId,
-              checkItemsArrayDispatch,
+              checkItemId,
             }}
             itemName={itemName}
           />

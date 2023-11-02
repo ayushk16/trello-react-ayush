@@ -3,7 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { fetchBoard } from '../../features/boards/boardSlice';
-import { fetchLists } from '../../features/lists/listsSlice';
+import {
+  fetchLists,
+  addList,
+  archiveList,
+} from '../../features/lists/listsSlice';
 
 import {
   styled,
@@ -27,14 +31,8 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-import useGetList from '../../Hooks/GetLists';
-
 import List from './List';
 import AddItem from '../common/AddItem';
-
-import addList from '../../Functions/addList';
-
-// import useGetboardView from '../../Hooks/GetboardView';
 
 const style = {
   marginTop: '-50px',
@@ -47,7 +45,6 @@ const style = {
 };
 
 const BoardView = ({ id }) => {
-  // const { boardView } = useGetboardView(id);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -58,26 +55,26 @@ const BoardView = ({ id }) => {
     return state.board.data;
   });
 
-  // const { board, setBoard, loading, error } = useGetList(id);
-
   const setBoard = 'as';
   useEffect(() => {
     dispatch(fetchLists(id));
   }, []);
 
-  const board = useSelector((state) => {
-    return state.lists.data;
+  const boardLists = useSelector((state) => {
+    return state.lists;
   });
-  const loading = useSelector((state) => {
-    return state.lists.loading;
-  });
-  const error = useSelector((state) => {
-    return state.lists.error;
-  });
+
+  const addNewList = ({ boardId, value }) => {
+    dispatch(addList({ boardId, value }));
+  };
+
+  const archieveAList = ({ listId }) => {
+    dispatch(archiveList(listId));
+  };
 
   const navigate = useNavigate();
 
-  if (loading) {
+  if (boardLists.loading) {
     return (
       <>
         <Container>
@@ -128,7 +125,7 @@ const BoardView = ({ id }) => {
     );
   }
 
-  if (error) {
+  if (boardLists.error) {
     return (
       <>
         <Container>
@@ -193,22 +190,16 @@ const BoardView = ({ id }) => {
               overflow="scroll"
               height={'80vh'}
             >
-              {board.map((list) => {
+              {boardLists.data.map((list) => {
                 return (
-                  <List
-                    key={list.id}
-                    listId={list.id}
-                    listName={list.name}
-                    setBoard={setBoard}
-                    board={board}
-                  />
+                  <List key={list.id} listId={list.id} listName={list.name} />
                 );
               })}
 
               <Box width="auto" minWidth={300} maxWidth={500} paddingX={4}>
                 <AddItem
-                  addFunction={addList}
-                  addFunctionParams={{ setBoard, boardId: id }}
+                  addFunction={addNewList}
+                  addFunctionParams={{ boardId: id }}
                   itemName={'List'}
                 />
               </Box>
