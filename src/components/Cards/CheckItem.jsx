@@ -19,7 +19,6 @@ const CheckItem = ({
   itemName,
   itemState,
   cardId,
-  checkItemsArrayDispatch,
   checkListId,
   checkItemId,
 }) => {
